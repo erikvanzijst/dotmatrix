@@ -1,0 +1,6 @@
+[submodule "kicad/libs/akn-libs"]
+	path = kicad/libs/akn-libs
+	url = git@github.com:aniline/akn-kicad-libs.git
+[submodule "kicad/modules/akn_misc.pretty"]
+	path = kicad/modules/akn_misc.pretty
+	url = git@github.com:aniline/akn_misc.pretty.git
