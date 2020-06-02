@@ -501,68 +501,10 @@ Wire Wire Line
 Wire Wire Line
 	2475 1750 2725 1750
 Wire Wire Line
-	2475 1850 2725 1850
-Wire Wire Line
-	2475 1950 2725 1950
-Wire Wire Line
-	2475 2050 2725 2050
-Wire Wire Line
-	2475 2150 2725 2150
-Wire Wire Line
-	2475 2250 2725 2250
-Wire Wire Line
-	2475 2350 2725 2350
-Wire Wire Line
-	2475 2450 2725 2450
-Wire Wire Line
 	2475 3300 2725 3300
-Wire Wire Line
-	2475 3400 2725 3400
-Wire Wire Line
-	2475 3500 2725 3500
-Wire Wire Line
-	2475 3600 2725 3600
-Wire Wire Line
-	2475 3700 2725 3700
-Wire Wire Line
-	2475 3800 2725 3800
-Wire Wire Line
-	2475 3900 2725 3900
 Wire Wire Line
 	2475 4000 2725 4000
 NoConn ~ 2475 4200
-Text Label 2475 1750 0    50   ~ 0
-ROW1
-Text Label 2475 1850 0    50   ~ 0
-ROW2
-Text Label 2475 1950 0    50   ~ 0
-ROW3
-Text Label 2475 2050 0    50   ~ 0
-ROW4
-Text Label 2475 2150 0    50   ~ 0
-ROW5
-Text Label 2475 2250 0    50   ~ 0
-ROW6
-Text Label 2475 2350 0    50   ~ 0
-ROW7
-Text Label 2475 2450 0    50   ~ 0
-ROW8
-Text Label 2475 3300 0    50   ~ 0
-ROW9
-Text Label 2475 3400 0    50   ~ 0
-ROW10
-Text Label 2475 3500 0    50   ~ 0
-ROW11
-Text Label 2475 3600 0    50   ~ 0
-ROW12
-Text Label 2475 3700 0    50   ~ 0
-ROW13
-Text Label 2475 3800 0    50   ~ 0
-ROW14
-Text Label 2475 3900 0    50   ~ 0
-ROW15
-Text Label 2475 4000 0    50   ~ 0
-ROW16
 Wire Wire Line
 	5775 2825 6025 2825
 Wire Wire Line
@@ -769,7 +711,7 @@ U 1 1 5EF48347
 P 4300 6450
 F 0 "R1" V 4093 6450 50  0000 C CNN
 F 1 "2.2K" V 4184 6450 50  0000 C CNN
-F 2 "" V 4230 6450 50  0001 C CNN
+F 2 "Resistor_SMD:R_1206_3216Metric_Pad1.42x1.75mm_HandSolder" V 4230 6450 50  0001 C CNN
 F 3 "~" H 4300 6450 50  0001 C CNN
 	1    4300 6450
 	0    1    1    0   
@@ -788,8 +730,8 @@ L Device:C C1
 U 1 1 5EF743CF
 P 2425 5925
 F 0 "C1" H 2540 5971 50  0000 L CNN
-F 1 "C" H 2540 5880 50  0000 L CNN
-F 2 "" H 2463 5775 50  0001 C CNN
+F 1 "100nF" H 2540 5880 50  0000 L CNN
+F 2 "Capacitor_SMD:C_0805_2012Metric_Pad1.15x1.40mm_HandSolder" H 2463 5775 50  0001 C CNN
 F 3 "~" H 2425 5925 50  0001 C CNN
 	1    2425 5925
 	1    0    0    -1  
@@ -798,17 +740,14 @@ Connection ~ 2425 5775
 Wire Wire Line
 	2425 5650 2425 5775
 Wire Wire Line
-	3300 6450 2425 6450
-Wire Wire Line
-	2425 6450 2425 6075
-Connection ~ 3300 6450
+	2425 6175 2425 6075
 $Comp
 L Device:C C2
 U 1 1 5EF8250E
 P 2350 3075
 F 0 "C2" V 2098 3075 50  0000 C CNN
 F 1 "100nF" V 2189 3075 50  0000 C CNN
-F 2 "" H 2388 2925 50  0001 C CNN
+F 2 "Capacitor_SMD:C_0805_2012Metric_Pad1.15x1.40mm_HandSolder" H 2388 2925 50  0001 C CNN
 F 3 "~" H 2350 3075 50  0001 C CNN
 	1    2350 3075
 	0    1    1    0   
@@ -831,7 +770,7 @@ U 1 1 5EFA155D
 P 2375 1525
 F 0 "C3" V 2123 1525 50  0000 C CNN
 F 1 "100nF" V 2214 1525 50  0000 C CNN
-F 2 "" H 2413 1375 50  0001 C CNN
+F 2 "Capacitor_SMD:C_0805_2012Metric_Pad1.15x1.40mm_HandSolder" H 2413 1375 50  0001 C CNN
 F 3 "~" H 2375 1525 50  0001 C CNN
 	1    2375 1525
 	0    1    1    0   
@@ -853,11 +792,11 @@ $EndComp
 Wire Wire Line
 	2525 1525 2625 1525
 $Comp
-L dk_Transistors-FETs-MOSFETs-Arrays:2N7002DW-7-F Q?
+L dk_Transistors-FETs-MOSFETs-Arrays:2N7002DW-7-F Q1
 U 1 1 5EFDDAF7
 P 3650 1450
-F 0 "Q?" V 3597 1778 60  0000 L CNN
-F 1 "2N7002DW-7-F" V 3703 1778 60  0000 L CNN
+F 0 "Q1" V 3597 1778 60  0000 L CNN
+F 1 "2N7002DW-7-F" V 3500 975 60  0000 L CNN
 F 2 "digikey-footprints:SOT-363" H 3850 1650 60  0001 L CNN
 F 3 "https://www.diodes.com/assets/Datasheets/ds30120.pdf" H 3850 1750 60  0001 L CNN
 F 4 "2N7002DW-FDICT-ND" H 3850 1850 60  0001 L CNN "Digi-Key_PN"
@@ -873,11 +812,11 @@ F 12 "Active" H 3850 2650 60  0001 L CNN "Status"
 	0    1    1    0   
 $EndComp
 $Comp
-L dk_Transistors-FETs-MOSFETs-Arrays:2N7002DW-7-F Q?
+L dk_Transistors-FETs-MOSFETs-Arrays:2N7002DW-7-F Q5
 U 1 1 5EFF4DCD
 P 4750 1450
-F 0 "Q?" V 4697 1778 60  0000 L CNN
-F 1 "2N7002DW-7-F" V 4803 1778 60  0000 L CNN
+F 0 "Q5" V 4697 1778 60  0000 L CNN
+F 1 "2N7002DW-7-F" V 4600 975 60  0000 L CNN
 F 2 "digikey-footprints:SOT-363" H 4950 1650 60  0001 L CNN
 F 3 "https://www.diodes.com/assets/Datasheets/ds30120.pdf" H 4950 1750 60  0001 L CNN
 F 4 "2N7002DW-FDICT-ND" H 4950 1850 60  0001 L CNN "Digi-Key_PN"
@@ -893,11 +832,11 @@ F 12 "Active" H 4950 2650 60  0001 L CNN "Status"
 	0    1    1    0   
 $EndComp
 $Comp
-L dk_Transistors-FETs-MOSFETs-Arrays:2N7002DW-7-F Q?
+L dk_Transistors-FETs-MOSFETs-Arrays:2N7002DW-7-F Q2
 U 1 1 5EFFE58A
 P 3650 2325
-F 0 "Q?" V 3597 2653 60  0000 L CNN
-F 1 "2N7002DW-7-F" V 3703 2653 60  0000 L CNN
+F 0 "Q2" V 3597 2653 60  0000 L CNN
+F 1 "2N7002DW-7-F" V 3500 1850 60  0000 L CNN
 F 2 "digikey-footprints:SOT-363" H 3850 2525 60  0001 L CNN
 F 3 "https://www.diodes.com/assets/Datasheets/ds30120.pdf" H 3850 2625 60  0001 L CNN
 F 4 "2N7002DW-FDICT-ND" H 3850 2725 60  0001 L CNN "Digi-Key_PN"
@@ -913,11 +852,11 @@ F 12 "Active" H 3850 3525 60  0001 L CNN "Status"
 	0    1    1    0   
 $EndComp
 $Comp
-L dk_Transistors-FETs-MOSFETs-Arrays:2N7002DW-7-F Q?
+L dk_Transistors-FETs-MOSFETs-Arrays:2N7002DW-7-F Q6
 U 1 1 5EFFE599
 P 4750 2325
-F 0 "Q?" V 4697 2653 60  0000 L CNN
-F 1 "2N7002DW-7-F" V 4803 2653 60  0000 L CNN
+F 0 "Q6" V 4697 2653 60  0000 L CNN
+F 1 "2N7002DW-7-F" V 4600 1850 60  0000 L CNN
 F 2 "digikey-footprints:SOT-363" H 4950 2525 60  0001 L CNN
 F 3 "https://www.diodes.com/assets/Datasheets/ds30120.pdf" H 4950 2625 60  0001 L CNN
 F 4 "2N7002DW-FDICT-ND" H 4950 2725 60  0001 L CNN "Digi-Key_PN"
@@ -933,11 +872,11 @@ F 12 "Active" H 4950 3525 60  0001 L CNN "Status"
 	0    1    1    0   
 $EndComp
 $Comp
-L dk_Transistors-FETs-MOSFETs-Arrays:2N7002DW-7-F Q?
+L dk_Transistors-FETs-MOSFETs-Arrays:2N7002DW-7-F Q3
 U 1 1 5F028EB6
 P 3650 3375
-F 0 "Q?" V 3597 3703 60  0000 L CNN
-F 1 "2N7002DW-7-F" V 3703 3703 60  0000 L CNN
+F 0 "Q3" V 3597 3703 60  0000 L CNN
+F 1 "2N7002DW-7-F" V 3500 2900 60  0000 L CNN
 F 2 "digikey-footprints:SOT-363" H 3850 3575 60  0001 L CNN
 F 3 "https://www.diodes.com/assets/Datasheets/ds30120.pdf" H 3850 3675 60  0001 L CNN
 F 4 "2N7002DW-FDICT-ND" H 3850 3775 60  0001 L CNN "Digi-Key_PN"
@@ -953,11 +892,11 @@ F 12 "Active" H 3850 4575 60  0001 L CNN "Status"
 	0    1    1    0   
 $EndComp
 $Comp
-L dk_Transistors-FETs-MOSFETs-Arrays:2N7002DW-7-F Q?
+L dk_Transistors-FETs-MOSFETs-Arrays:2N7002DW-7-F Q7
 U 1 1 5F028EC5
 P 4750 3375
-F 0 "Q?" V 4697 3703 60  0000 L CNN
-F 1 "2N7002DW-7-F" V 4803 3703 60  0000 L CNN
+F 0 "Q7" V 4697 3703 60  0000 L CNN
+F 1 "2N7002DW-7-F" V 4600 2900 60  0000 L CNN
 F 2 "digikey-footprints:SOT-363" H 4950 3575 60  0001 L CNN
 F 3 "https://www.diodes.com/assets/Datasheets/ds30120.pdf" H 4950 3675 60  0001 L CNN
 F 4 "2N7002DW-FDICT-ND" H 4950 3775 60  0001 L CNN "Digi-Key_PN"
@@ -973,11 +912,11 @@ F 12 "Active" H 4950 4575 60  0001 L CNN "Status"
 	0    1    1    0   
 $EndComp
 $Comp
-L dk_Transistors-FETs-MOSFETs-Arrays:2N7002DW-7-F Q?
+L dk_Transistors-FETs-MOSFETs-Arrays:2N7002DW-7-F Q4
 U 1 1 5F028ED4
 P 3650 4250
-F 0 "Q?" V 3597 4578 60  0000 L CNN
-F 1 "2N7002DW-7-F" V 3703 4578 60  0000 L CNN
+F 0 "Q4" V 3597 4578 60  0000 L CNN
+F 1 "2N7002DW-7-F" V 3500 3775 60  0000 L CNN
 F 2 "digikey-footprints:SOT-363" H 3850 4450 60  0001 L CNN
 F 3 "https://www.diodes.com/assets/Datasheets/ds30120.pdf" H 3850 4550 60  0001 L CNN
 F 4 "2N7002DW-FDICT-ND" H 3850 4650 60  0001 L CNN "Digi-Key_PN"
@@ -993,11 +932,11 @@ F 12 "Active" H 3850 5450 60  0001 L CNN "Status"
 	0    1    1    0   
 $EndComp
 $Comp
-L dk_Transistors-FETs-MOSFETs-Arrays:2N7002DW-7-F Q?
+L dk_Transistors-FETs-MOSFETs-Arrays:2N7002DW-7-F Q8
 U 1 1 5F028EE3
 P 4750 4250
-F 0 "Q?" V 4697 4578 60  0000 L CNN
-F 1 "2N7002DW-7-F" V 4803 4578 60  0000 L CNN
+F 0 "Q8" V 4697 4578 60  0000 L CNN
+F 1 "2N7002DW-7-F" V 4600 3775 60  0000 L CNN
 F 2 "digikey-footprints:SOT-363" H 4950 4450 60  0001 L CNN
 F 3 "https://www.diodes.com/assets/Datasheets/ds30120.pdf" H 4950 4550 60  0001 L CNN
 F 4 "2N7002DW-FDICT-ND" H 4950 4650 60  0001 L CNN "Digi-Key_PN"
@@ -1012,6 +951,418 @@ F 12 "Active" H 4950 5450 60  0001 L CNN "Status"
 	1    4750 4250
 	0    1    1    0   
 $EndComp
+Wire Wire Line
+	3850 1150 3850 1075
+Wire Wire Line
+	3850 1075 4950 1075
+Wire Wire Line
+	4950 1075 4950 1150
+Wire Wire Line
+	4950 2025 4950 1975
+Wire Wire Line
+	4950 1975 4175 1975
+Wire Wire Line
+	3850 1975 3850 2025
+Wire Wire Line
+	3850 3075 3850 3025
+Wire Wire Line
+	3850 3025 4950 3025
+Wire Wire Line
+	4950 3025 4950 3075
+Wire Wire Line
+	3250 2625 3250 2675
+Wire Wire Line
+	3250 2675 4175 2675
+Wire Wire Line
+	4350 2675 4350 2625
+Wire Wire Line
+	3250 3675 3250 3725
+Wire Wire Line
+	4350 3725 4350 3675
+Wire Wire Line
+	3850 3950 3850 3900
+Wire Wire Line
+	3850 3900 4950 3900
+Wire Wire Line
+	4950 3900 4950 3950
+Wire Wire Line
+	3250 4550 3250 4600
+Wire Wire Line
+	3250 4600 4175 4600
+Wire Wire Line
+	4350 4600 4350 4550
+Wire Wire Line
+	3250 1750 3250 1800
+Wire Wire Line
+	3250 1800 4175 1800
+Wire Wire Line
+	4350 1800 4350 1750
+Wire Wire Line
+	2725 1075 3550 1075
+Wire Wire Line
+	3550 1075 3550 1150
+Wire Wire Line
+	2725 1075 2725 1750
+Wire Wire Line
+	2800 1850 2800 1000
+Wire Wire Line
+	2800 1000 4650 1000
+Wire Wire Line
+	4650 1000 4650 1150
+Wire Wire Line
+	2475 1850 2800 1850
+Wire Wire Line
+	2875 1950 2875 1825
+Wire Wire Line
+	2875 1825 3550 1825
+Wire Wire Line
+	3550 1825 3550 1750
+Wire Wire Line
+	2475 1950 2875 1950
+Wire Wire Line
+	2950 2050 2950 1850
+Wire Wire Line
+	4650 1850 4650 1750
+Wire Wire Line
+	2475 2050 2950 2050
+Wire Wire Line
+	2950 1850 4650 1850
+Wire Wire Line
+	3075 2250 3075 1975
+Wire Wire Line
+	3075 1975 3550 1975
+Wire Wire Line
+	3550 1975 3550 2025
+Wire Wire Line
+	2475 2250 3075 2250
+Wire Wire Line
+	3000 2150 3000 1950
+Wire Wire Line
+	3000 1950 4650 1950
+Wire Wire Line
+	4650 1950 4650 2025
+Wire Wire Line
+	2475 2150 3000 2150
+Wire Wire Line
+	2950 2350 2950 2700
+Wire Wire Line
+	2950 2700 3550 2700
+Wire Wire Line
+	3550 2700 3550 2625
+Wire Wire Line
+	2475 2350 2950 2350
+Wire Wire Line
+	2875 2450 2875 2725
+Wire Wire Line
+	2875 2725 4650 2725
+Wire Wire Line
+	4650 2725 4650 2625
+Wire Wire Line
+	2475 2450 2875 2450
+Wire Wire Line
+	3850 1750 3850 1825
+Wire Wire Line
+	3850 1825 5575 1825
+Text Label 5400 1825 0    50   ~ 0
+ROW1
+Wire Wire Line
+	4950 1750 5575 1750
+Entry Wire Line
+	5575 1750 5675 1850
+Text Label 5400 1750 0    50   ~ 0
+ROW2
+Wire Wire Line
+	3250 1150 3250 800 
+Wire Wire Line
+	3250 800  5575 800 
+Entry Wire Line
+	5575 800  5675 900 
+Text Label 5400 900  0    50   ~ 0
+ROW4
+Wire Wire Line
+	4350 1150 4350 900 
+Wire Wire Line
+	4350 900  5575 900 
+Entry Wire Line
+	5575 900  5675 1000
+Text Label 5400 800  0    50   ~ 0
+ROW3
+Entry Wire Line
+	5575 1825 5675 1925
+Wire Wire Line
+	4950 2625 5575 2625
+Entry Wire Line
+	5575 2625 5675 2725
+Text Label 5350 2625 0    50   ~ 0
+ROW5
+Wire Wire Line
+	3850 2625 3850 2750
+Wire Wire Line
+	3850 2750 5575 2750
+Entry Wire Line
+	5575 2750 5675 2850
+Text Label 5350 2750 0    50   ~ 0
+ROW6
+Wire Wire Line
+	3250 2025 3250 1875
+Wire Wire Line
+	3250 1875 5250 1875
+Wire Wire Line
+	5250 1875 5250 1925
+Wire Wire Line
+	5250 1925 5575 1925
+Entry Wire Line
+	5575 1925 5675 2025
+Text Label 5400 1925 0    50   ~ 0
+ROW7
+Wire Wire Line
+	4350 2025 4350 1925
+Wire Wire Line
+	4350 1925 5150 1925
+Wire Wire Line
+	5150 1925 5150 2000
+Wire Wire Line
+	5150 2000 5575 2000
+Entry Wire Line
+	5575 2000 5675 2100
+Text Label 5400 2000 0    50   ~ 0
+ROW8
+Wire Wire Line
+	2725 3300 2725 3025
+Wire Wire Line
+	2725 3025 3550 3025
+Wire Wire Line
+	3550 3025 3550 3075
+Wire Wire Line
+	2800 3400 2800 3000
+Wire Wire Line
+	2800 3000 4650 3000
+Wire Wire Line
+	4650 3000 4650 3075
+Wire Wire Line
+	2475 3400 2800 3400
+Wire Wire Line
+	3025 3500 3025 3750
+Wire Wire Line
+	3025 3750 3550 3750
+Wire Wire Line
+	3550 3750 3550 3675
+Wire Wire Line
+	2475 3500 3025 3500
+Wire Wire Line
+	2950 3600 2950 3775
+Wire Wire Line
+	2950 3775 4650 3775
+Wire Wire Line
+	4650 3775 4650 3675
+Wire Wire Line
+	2475 3600 2950 3600
+Wire Wire Line
+	3850 3675 3850 3750
+Wire Wire Line
+	3850 3750 5575 3750
+Entry Wire Line
+	5575 3750 5675 3850
+Text Label 5350 3750 0    50   ~ 0
+ROW9
+Wire Wire Line
+	4950 3675 5575 3675
+Entry Wire Line
+	5575 3675 5675 3775
+Text Label 5350 3675 0    50   ~ 0
+ROW10
+Wire Wire Line
+	3250 3075 3250 2850
+Wire Wire Line
+	3250 2850 5575 2850
+Entry Wire Line
+	5575 2850 5675 2950
+Text Label 5350 2850 0    50   ~ 0
+ROW11
+Wire Wire Line
+	4350 3075 4350 2950
+Wire Wire Line
+	4350 2950 5575 2950
+Entry Wire Line
+	5575 2950 5675 3050
+Text Label 5350 2950 0    50   ~ 0
+ROW12
+$Comp
+L power:GND #PWR014
+U 1 1 5EF5D6A6
+P 4950 3025
+F 0 "#PWR014" H 4950 2775 50  0001 C CNN
+F 1 "GND" V 4955 2897 50  0000 R CNN
+F 2 "" H 4950 3025 50  0001 C CNN
+F 3 "" H 4950 3025 50  0001 C CNN
+	1    4950 3025
+	0    -1   -1   0   
+$EndComp
+Connection ~ 4950 3025
+$Comp
+L power:GND #PWR010
+U 1 1 5EF5EBAE
+P 4175 2675
+F 0 "#PWR010" H 4175 2425 50  0001 C CNN
+F 1 "GND" V 4180 2547 50  0000 R CNN
+F 2 "" H 4175 2675 50  0001 C CNN
+F 3 "" H 4175 2675 50  0001 C CNN
+	1    4175 2675
+	-1   0    0    1   
+$EndComp
+Connection ~ 4175 2675
+Wire Wire Line
+	4175 2675 4350 2675
+$Comp
+L power:GND #PWR09
+U 1 1 5EF6034D
+P 4175 1975
+F 0 "#PWR09" H 4175 1725 50  0001 C CNN
+F 1 "GND" V 4180 1847 50  0000 R CNN
+F 2 "" H 4175 1975 50  0001 C CNN
+F 3 "" H 4175 1975 50  0001 C CNN
+	1    4175 1975
+	1    0    0    -1  
+$EndComp
+$Comp
+L power:GND #PWR013
+U 1 1 5EF61139
+P 4950 1075
+F 0 "#PWR013" H 4950 825 50  0001 C CNN
+F 1 "GND" V 4955 947 50  0000 R CNN
+F 2 "" H 4950 1075 50  0001 C CNN
+F 3 "" H 4950 1075 50  0001 C CNN
+	1    4950 1075
+	0    -1   -1   0   
+$EndComp
+Connection ~ 4950 1075
+$Comp
+L power:GND #PWR08
+U 1 1 5EF61B64
+P 4175 1800
+F 0 "#PWR08" H 4175 1550 50  0001 C CNN
+F 1 "GND" V 4180 1672 50  0000 R CNN
+F 2 "" H 4175 1800 50  0001 C CNN
+F 3 "" H 4175 1800 50  0001 C CNN
+	1    4175 1800
+	-1   0    0    1   
+$EndComp
+Connection ~ 4175 1800
+Wire Wire Line
+	4175 1800 4350 1800
+Connection ~ 4175 1975
+Wire Wire Line
+	3850 1975 4175 1975
+Wire Wire Line
+	3250 3725 4175 3725
+$Comp
+L power:GND #PWR011
+U 1 1 5EF83559
+P 4175 3725
+F 0 "#PWR011" H 4175 3475 50  0001 C CNN
+F 1 "GND" V 4180 3597 50  0000 R CNN
+F 2 "" H 4175 3725 50  0001 C CNN
+F 3 "" H 4175 3725 50  0001 C CNN
+	1    4175 3725
+	-1   0    0    1   
+$EndComp
+Connection ~ 4175 3725
+Wire Wire Line
+	4175 3725 4350 3725
+Wire Wire Line
+	2875 3700 2875 3875
+Wire Wire Line
+	2875 3875 4650 3875
+Wire Wire Line
+	4650 3875 4650 3950
+Wire Wire Line
+	2475 3700 2875 3700
+Wire Wire Line
+	2825 3800 2825 3900
+Wire Wire Line
+	2825 3900 3550 3900
+Wire Wire Line
+	3550 3900 3550 3950
+Wire Wire Line
+	2475 3800 2825 3800
+Wire Wire Line
+	2775 3900 2775 4625
+Wire Wire Line
+	2775 4625 3550 4625
+Wire Wire Line
+	3550 4625 3550 4550
+Wire Wire Line
+	2475 3900 2775 3900
+Wire Wire Line
+	2725 4000 2725 4650
+Wire Wire Line
+	2725 4650 4650 4650
+Wire Wire Line
+	4650 4650 4650 4550
+Wire Wire Line
+	4950 4550 5575 4550
+Entry Wire Line
+	5575 4550 5675 4650
+Text Label 5350 4550 0    50   ~ 0
+ROW13
+Wire Wire Line
+	3850 4550 3850 4625
+Wire Wire Line
+	3850 4625 5575 4625
+Entry Wire Line
+	5575 4625 5675 4725
+Text Label 5350 4625 0    50   ~ 0
+ROW14
+Wire Wire Line
+	3250 3950 3250 3825
+Wire Wire Line
+	3250 3825 5575 3825
+Entry Wire Line
+	5575 3825 5675 3925
+Text Label 5350 3825 0    50   ~ 0
+ROW15
+Wire Wire Line
+	4350 3950 4350 3850
+Wire Wire Line
+	4350 3850 5275 3850
+Wire Wire Line
+	5275 3850 5275 3900
+Wire Wire Line
+	5275 3900 5575 3900
+Entry Wire Line
+	5575 3900 5675 4000
+Text Label 5350 3900 0    50   ~ 0
+ROW16
+$Comp
+L power:GND #PWR015
+U 1 1 5F01588B
+P 4950 3950
+F 0 "#PWR015" H 4950 3700 50  0001 C CNN
+F 1 "GND" V 4955 3822 50  0000 R CNN
+F 2 "" H 4950 3950 50  0001 C CNN
+F 3 "" H 4950 3950 50  0001 C CNN
+	1    4950 3950
+	0    -1   -1   0   
+$EndComp
+Connection ~ 4950 3950
+$Comp
+L power:GND #PWR012
+U 1 1 5F028CC1
+P 4175 4600
+F 0 "#PWR012" H 4175 4350 50  0001 C CNN
+F 1 "GND" V 4180 4472 50  0000 R CNN
+F 2 "" H 4175 4600 50  0001 C CNN
+F 3 "" H 4175 4600 50  0001 C CNN
+	1    4175 4600
+	-1   0    0    1   
+$EndComp
+Connection ~ 4175 4600
+Wire Wire Line
+	4175 4600 4350 4600
+Wire Bus Line
+	8450 3875 8450 6175
+Wire Bus Line
+	8450 2925 8450 3875
 Wire Bus Line
 	10475 4900 10475 6175
 Wire Bus Line
@@ -1021,13 +1372,20 @@ Wire Bus Line
 Wire Bus Line
 	7700 2925 7700 4900
 Wire Bus Line
-	5675 2925 5675 3875
-Wire Bus Line
-	8450 2925 8450 3875
-Wire Bus Line
-	8450 3875 8450 6175
-Wire Bus Line
 	5675 3875 5675 6175
 Wire Bus Line
 	3000 4900 7700 4900
+Wire Bus Line
+	5675 725  5675 3875
+$Comp
+L power:GND #PWR?
+U 1 1 5F217EB1
+P 2425 6175
+F 0 "#PWR?" H 2425 5925 50  0001 C CNN
+F 1 "GND" H 2430 6002 50  0000 C CNN
+F 2 "" H 2425 6175 50  0001 C CNN
+F 3 "" H 2425 6175 50  0001 C CNN
+	1    2425 6175
+	1    0    0    -1  
+$EndComp
 $EndSCHEMATC
