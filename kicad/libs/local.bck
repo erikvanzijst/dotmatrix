@@ -1,3 +1,8 @@
 EESchema-DOCLIB  Version 2.0
 #
+$CMP TLC59025
+D Low Power 16-Channel Constant Current LED Sink Driver
+F http://www.ti.com/lit/ds/symlink/tlc59025.pdf
+$ENDCMP
+#
 #End Doc Library
