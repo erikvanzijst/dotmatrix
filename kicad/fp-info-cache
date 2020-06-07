@@ -1,4 +1,4 @@
-17672286318192126
+17673877811670649
 Battery
 BatteryHolder_Bulgin_BX0036_1xC
 Bulgin Battery Holder, BX0036, Battery Type C (https://www.bulgin.com/products/pub/media/bulgin/data/Battery_holders.pdf)
@@ -78560,3 +78560,10 @@ Zigbee_Module_MRF24J40MD
 0
 12
 12
+local
+SOIC-16_3.9x9.9mm_P1.27mm_widepads
+SOIC, 16 Pin (JEDEC MS-012AC, https://www.analog.com/media/en/package-pcb-resources/package/pkg_pdf/soic_narrow-r/r_16.pdf), generated with kicad-footprint-generator ipc_gullwing_generator.py
+SOIC SO
+0
+16
+16
