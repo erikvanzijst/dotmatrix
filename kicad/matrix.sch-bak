@@ -63,7 +63,7 @@ U 1 1 5EE0C466
 P 3650 5775
 F 0 "U1" V 4150 4900 50  0000 R CNN
 F 1 "TLC59025" V 3650 5975 50  0000 R CNN
-F 2 "Package_SO:SSOP-24_3.9x8.7mm_P0.635mm" H 3650 5775 50  0001 C CNN
+F 2 "local:SSOP-24_3.9x8.7mm_P0.635mm_widepads" H 3650 5775 50  0001 C CNN
 F 3 "http://www.ti.com/lit/ds/symlink/tlc59025.pdf" H 3650 5775 50  0001 C CNN
 	1    3650 5775
 	0    -1   -1   0   
@@ -396,7 +396,7 @@ U 1 1 5EE2D2DB
 P 2075 3700
 F 0 "U3" H 2250 4250 50  0000 R CNN
 F 1 "74HC595" V 2075 3700 50  0000 R CNN
-F 2 "Package_SO:SOIC-16_3.9x9.9mm_P1.27mm" H 2075 3700 50  0001 C CNN
+F 2 "local:SOIC-16_3.9x9.9mm_P1.27mm_widepads" H 2075 3700 50  0001 C CNN
 F 3 "http://www.ti.com/lit/ds/symlink/sn74hc595.pdf" H 2075 3700 50  0001 C CNN
 	1    2075 3700
 	1    0    0    -1  
@@ -407,7 +407,7 @@ U 1 1 5EE2FD5B
 P 2075 2150
 F 0 "U2" H 2250 2700 50  0000 R CNN
 F 1 "74HC595" V 2075 2175 50  0000 R CNN
-F 2 "Package_SO:SOIC-16_3.9x9.9mm_P1.27mm" H 2075 2150 50  0001 C CNN
+F 2 "local:SOIC-16_3.9x9.9mm_P1.27mm_widepads" H 2075 2150 50  0001 C CNN
 F 3 "http://www.ti.com/lit/ds/symlink/sn74hc595.pdf" H 2075 2150 50  0001 C CNN
 	1    2075 2150
 	1    0    0    -1  
