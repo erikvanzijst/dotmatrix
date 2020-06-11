@@ -1,4 +1,4 @@
-17678652649885649
+17680244502333649
 Battery
 BatteryHolder_Bulgin_BX0036_1xC
 Bulgin Battery Holder, BX0036, Battery Type C (https://www.bulgin.com/products/pub/media/bulgin/data/Battery_holders.pdf)
@@ -78560,6 +78560,13 @@ Zigbee_Module_MRF24J40MD
 0
 12
 12
+local
+C_0805_2012Metric_Pad1.15x1.40mm_widepads
+Capacitor SMD 0805 (2012 Metric), square (rectangular) end terminal, IPC_7351 nominal with elongated pad for handsoldering. (Body size source: https://docs.google.com/spreadsheets/d/1BsfQQcO9C6DZCsRaXUlFlo91Tg2WpOkGARC1WS5S8t0/edit?usp=sharing), generated with kicad-footprint-generator
+capacitor handsolder
+0
+2
+2
 local
 LED_8x8_3MM_38x38MM
 
