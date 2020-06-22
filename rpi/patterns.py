@@ -49,9 +49,14 @@ def main():
 
     display = MatrixDriver(1, 2, 3, 4, 5, 6, showhz=True)
 
-    for p in patterns[args.pattern](args, display.DIM):
-        display.draw(p)
-        sleep(args.interval)
+    try:
+        for p in patterns[args.pattern](args, display.DIM):
+            display.draw(p)
+            sleep(args.interval)
+    except KeyboardInterrupt:
+        pass
+    finally:
+        display.close()
 
 
 if __name__ == '__main__':
