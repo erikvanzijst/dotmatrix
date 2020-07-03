@@ -50,9 +50,10 @@ def main():
     display = MatrixDriver(1, 2, 3, 4, 5, 6, showhz=True)
 
     try:
-        for p in patterns[args.pattern](args, display.DIM):
-            display.draw(p)
-            sleep(args.interval)
+        while True:
+            for p in patterns[args.pattern[0]](args, display.DIM):
+                display.draw(p)
+                sleep(args.interval)
     except KeyboardInterrupt:
         pass
     finally:

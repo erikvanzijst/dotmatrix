@@ -11,7 +11,7 @@ def _pulse(dev: DigitalOutputDevice) -> None:
     dev.pin.state = True
 
 
-def _run(screen: Array, die: Value, rowsdi: int, rowclk: int, colsdi: int, colclk: int, oe: int, le: int,
+def _run(screen: Array, die: Value, rowclk: int, rowsdi: int, oe: int, colsdi: int, colclk: int, le: int,
          showhz: bool):
     print("Connecting to display...")
     ROWSDI = DigitalOutputDevice(rowsdi)
@@ -21,16 +21,15 @@ def _run(screen: Array, die: Value, rowsdi: int, rowclk: int, colsdi: int, colcl
     OE = DigitalOutputDevice(oe, initial_value=True)
     LE = DigitalOutputDevice(le)
 
-    OE.pin.state = False
-
-    cnt, last = 0, time()
-    width = 2 ** MatrixDriver.DIM
-
     try:
+        OE.pin.state = False
+        cnt, last = 0, time()
+        width = 2 ** MatrixDriver.DIM
+
         while not die.value:
             for row in range(MatrixDriver.DIM):
                 LE.pin.state = False
-                ROWSDI.pin.state = row == 0
+                ROWSDI.pin.state = row != 0
                 _pulse(ROWCLK)
 
                 bit = 1
@@ -60,20 +59,27 @@ def _run(screen: Array, die: Value, rowsdi: int, rowclk: int, colsdi: int, colcl
 class MatrixDriver(object):
     DIM = 16
 
-    def __init__(self, rowsdi: int, rowclk: int, colsdi: int, colclk: int, oe: int, le: int,
+    def __init__(self, rowclk: int = 2, rowsdi: int = 3, oe: int = 4, colsdi: int = 17, colclk: int = 27, le: int = 22,
                  showhz: bool = False) -> None:
         self.screen = Array(c_uint16, [0] * self.DIM, lock=True)
         self.die = Value(c_bool, False)
 
         self.showhz = showhz
         self.process = Process(target=_run,
-                               args=(self.screen, self.die, rowsdi, rowclk, colsdi, colclk, oe, le, showhz))
+                               args=(self.screen, self.die, rowclk, rowsdi, oe, colsdi, colclk, le, showhz))
+        self.process.start()
 
-    def draw(self, screen: List[int]):
+    def draw(self, screen: List[int]) -> None:
         assert len(screen) == self.DIM
         for i in range(self.DIM):
             self.screen[i] = screen[i]
 
-    def close(self):
+    def setpixel(self, row: int, col: int, on: bool) -> None:
+        if on:
+            self.screen[row] |= (1 << col)
+        else:
+            self.screen[row] &= ((1 << col) ^ 0xff)
+
+    def close(self) -> None:
         self.die.value = True
         self.process.join()
