@@ -1,0 +1,4 @@
+pigpio==1.46
+gpiozero==1.5.1
+ipython==7.15.0
+ipython-genutils==0.2.0
