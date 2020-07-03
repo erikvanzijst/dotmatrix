@@ -1,5 +1,10 @@
 EESchema-DOCLIB  Version 2.0
 #
+$CMP P-FET
+D P-CHANNEL ENHANCEMENT MODE MOSFET
+F https://www.diodes.com/assets/Datasheets/DMP3085LSD.pdf
+$ENDCMP
+#
 $CMP TLC59025
 D Low Power 16-Channel Constant Current LED Sink Driver
 F http://www.ti.com/lit/ds/symlink/tlc59025.pdf

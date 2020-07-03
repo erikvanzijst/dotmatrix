@@ -5,8 +5,8 @@ $Descr A3 16535 11693
 encoding utf-8
 Sheet 1 1
 Title "16x16 LED Dot Matrix Display"
-Date "2020-05-31"
-Rev ""
+Date "2020-07-03"
+Rev "v0.2"
 Comp ""
 Comment1 ""
 Comment2 ""
@@ -769,8 +769,6 @@ Entry Wire Line
 	10175 4225 10275 4325
 Entry Wire Line
 	10175 2225 10275 2325
-Text Label 9625 4625 0    50   ~ 0
-ROW9
 Entry Wire Line
 	10175 2625 10275 2725
 Text Label 9625 5025 0    50   ~ 0
@@ -895,18 +893,16 @@ ROWCLK
 $Comp
 L local:P-FET U4
 U 1 1 5F09B5FB
-P 9250 1425
-F 0 "U4" H 9000 1625 50  0000 C CNN
-F 1 "P-FET" V 9250 1425 50  0000 C CNN
-F 2 "local:SOIC-8_3.9x4.9mm_P1.27mm_widepads" H 9450 1825 50  0001 C CNN
-F 3 "https://www.diodes.com/assets/Datasheets/DMP3085LSD.pdf" H 9450 1825 50  0001 C CNN
-	1    9250 1425
+P 9250 1825
+F 0 "U4" H 9000 2025 50  0000 C CNN
+F 1 "P-FET" V 9250 1825 50  0000 C CNN
+F 2 "local:SOIC-8_3.9x4.9mm_P1.27mm_widepads" H 9450 2225 50  0001 C CNN
+F 3 "https://www.diodes.com/assets/Datasheets/DMP3085LSD.pdf" H 9450 2225 50  0001 C CNN
+	1    9250 1825
 	1    0    0    -1  
 $EndComp
 Text Label 9625 5425 0    50   ~ 0
 ROW11
-Text Label 9625 4225 0    50   ~ 0
-ROW8
 Text Label 9625 3825 0    50   ~ 0
 ROW7
 Text Label 9625 3425 0    50   ~ 0
@@ -924,78 +920,78 @@ ROW1
 $Comp
 L local:P-FET U4
 U 2 1 5F127DC7
-P 9250 1825
-F 0 "U4" H 9000 2025 50  0000 C CNN
-F 1 "P-FET" V 9250 1825 50  0000 C CNN
-F 2 "local:SOIC-8_3.9x4.9mm_P1.27mm_widepads" H 9450 2225 50  0001 C CNN
-F 3 "https://www.diodes.com/assets/Datasheets/DMP3085LSD.pdf" H 9450 2225 50  0001 C CNN
-	2    9250 1825
+P 9250 1425
+F 0 "U4" H 9000 1625 50  0000 C CNN
+F 1 "P-FET" V 9250 1425 50  0000 C CNN
+F 2 "local:SOIC-8_3.9x4.9mm_P1.27mm_widepads" H 9450 1825 50  0001 C CNN
+F 3 "https://www.diodes.com/assets/Datasheets/DMP3085LSD.pdf" H 9450 1825 50  0001 C CNN
+	2    9250 1425
 	1    0    0    -1  
 $EndComp
 $Comp
 L local:P-FET U5
 U 1 1 5F137EE0
-P 9250 2225
-F 0 "U5" H 9000 2425 50  0000 C CNN
-F 1 "P-FET" V 9250 2225 50  0000 C CNN
-F 2 "local:SOIC-8_3.9x4.9mm_P1.27mm_widepads" H 9450 2625 50  0001 C CNN
-F 3 "https://www.diodes.com/assets/Datasheets/DMP3085LSD.pdf" H 9450 2625 50  0001 C CNN
-	1    9250 2225
-	1    0    0    -1  
-$EndComp
-$Comp
-L local:P-FET U5
-U 2 1 5F137EEA
 P 9250 2625
 F 0 "U5" H 9000 2825 50  0000 C CNN
 F 1 "P-FET" V 9250 2625 50  0000 C CNN
 F 2 "local:SOIC-8_3.9x4.9mm_P1.27mm_widepads" H 9450 3025 50  0001 C CNN
 F 3 "https://www.diodes.com/assets/Datasheets/DMP3085LSD.pdf" H 9450 3025 50  0001 C CNN
-	2    9250 2625
+	1    9250 2625
+	1    0    0    -1  
+$EndComp
+$Comp
+L local:P-FET U5
+U 2 1 5F137EEA
+P 9250 2225
+F 0 "U5" H 9000 2425 50  0000 C CNN
+F 1 "P-FET" V 9250 2225 50  0000 C CNN
+F 2 "local:SOIC-8_3.9x4.9mm_P1.27mm_widepads" H 9450 2625 50  0001 C CNN
+F 3 "https://www.diodes.com/assets/Datasheets/DMP3085LSD.pdf" H 9450 2625 50  0001 C CNN
+	2    9250 2225
 	1    0    0    -1  
 $EndComp
 $Comp
 L local:P-FET U6
 U 1 1 5F15A3EE
-P 9250 3025
-F 0 "U6" H 9000 3225 50  0000 C CNN
-F 1 "P-FET" V 9250 3025 50  0000 C CNN
-F 2 "local:SOIC-8_3.9x4.9mm_P1.27mm_widepads" H 9450 3425 50  0001 C CNN
-F 3 "https://www.diodes.com/assets/Datasheets/DMP3085LSD.pdf" H 9450 3425 50  0001 C CNN
-	1    9250 3025
-	1    0    0    -1  
-$EndComp
-$Comp
-L local:P-FET U6
-U 2 1 5F15A3F8
 P 9250 3425
 F 0 "U6" H 9000 3625 50  0000 C CNN
 F 1 "P-FET" V 9250 3425 50  0000 C CNN
 F 2 "local:SOIC-8_3.9x4.9mm_P1.27mm_widepads" H 9450 3825 50  0001 C CNN
 F 3 "https://www.diodes.com/assets/Datasheets/DMP3085LSD.pdf" H 9450 3825 50  0001 C CNN
-	2    9250 3425
+	1    9250 3425
+	1    0    0    -1  
+$EndComp
+$Comp
+L local:P-FET U6
+U 2 1 5F15A3F8
+P 9250 3025
+F 0 "U6" H 9000 3225 50  0000 C CNN
+F 1 "P-FET" V 9250 3025 50  0000 C CNN
+F 2 "local:SOIC-8_3.9x4.9mm_P1.27mm_widepads" H 9450 3425 50  0001 C CNN
+F 3 "https://www.diodes.com/assets/Datasheets/DMP3085LSD.pdf" H 9450 3425 50  0001 C CNN
+	2    9250 3025
 	1    0    0    -1  
 $EndComp
 $Comp
 L local:P-FET U7
 U 1 1 5F15A402
-P 9250 3825
-F 0 "U7" H 9000 4025 50  0000 C CNN
-F 1 "P-FET" V 9250 3825 50  0000 C CNN
-F 2 "local:SOIC-8_3.9x4.9mm_P1.27mm_widepads" H 9450 4225 50  0001 C CNN
-F 3 "https://www.diodes.com/assets/Datasheets/DMP3085LSD.pdf" H 9450 4225 50  0001 C CNN
-	1    9250 3825
-	1    0    0    -1  
-$EndComp
-$Comp
-L local:P-FET U7
-U 2 1 5F15A40C
 P 9250 4225
 F 0 "U7" H 9000 4425 50  0000 C CNN
 F 1 "P-FET" V 9250 4225 50  0000 C CNN
 F 2 "local:SOIC-8_3.9x4.9mm_P1.27mm_widepads" H 9450 4625 50  0001 C CNN
 F 3 "https://www.diodes.com/assets/Datasheets/DMP3085LSD.pdf" H 9450 4625 50  0001 C CNN
-	2    9250 4225
+	1    9250 4225
+	1    0    0    -1  
+$EndComp
+$Comp
+L local:P-FET U7
+U 2 1 5F15A40C
+P 9250 3825
+F 0 "U7" H 9000 4025 50  0000 C CNN
+F 1 "P-FET" V 9250 3825 50  0000 C CNN
+F 2 "local:SOIC-8_3.9x4.9mm_P1.27mm_widepads" H 9450 4225 50  0001 C CNN
+F 3 "https://www.diodes.com/assets/Datasheets/DMP3085LSD.pdf" H 9450 4225 50  0001 C CNN
+	2    9250 3825
 	1    0    0    -1  
 $EndComp
 $Comp
@@ -1045,45 +1041,45 @@ $EndComp
 $Comp
 L local:P-FET U10
 U 1 1 5F17DC99
-P 9250 6225
-F 0 "U10" H 9000 6425 50  0000 C CNN
-F 1 "P-FET" V 9250 6225 50  0000 C CNN
-F 2 "local:SOIC-8_3.9x4.9mm_P1.27mm_widepads" H 9450 6625 50  0001 C CNN
-F 3 "https://www.diodes.com/assets/Datasheets/DMP3085LSD.pdf" H 9450 6625 50  0001 C CNN
-	1    9250 6225
-	1    0    0    -1  
-$EndComp
-$Comp
-L local:P-FET U10
-U 2 1 5F17DCA3
 P 9250 6625
 F 0 "U10" H 9000 6825 50  0000 C CNN
 F 1 "P-FET" V 9250 6625 50  0000 C CNN
 F 2 "local:SOIC-8_3.9x4.9mm_P1.27mm_widepads" H 9450 7025 50  0001 C CNN
 F 3 "https://www.diodes.com/assets/Datasheets/DMP3085LSD.pdf" H 9450 7025 50  0001 C CNN
-	2    9250 6625
+	1    9250 6625
+	1    0    0    -1  
+$EndComp
+$Comp
+L local:P-FET U10
+U 2 1 5F17DCA3
+P 9250 6225
+F 0 "U10" H 9000 6425 50  0000 C CNN
+F 1 "P-FET" V 9250 6225 50  0000 C CNN
+F 2 "local:SOIC-8_3.9x4.9mm_P1.27mm_widepads" H 9450 6625 50  0001 C CNN
+F 3 "https://www.diodes.com/assets/Datasheets/DMP3085LSD.pdf" H 9450 6625 50  0001 C CNN
+	2    9250 6225
 	1    0    0    -1  
 $EndComp
 $Comp
 L local:P-FET U11
 U 1 1 5F17DCAD
-P 9250 7025
-F 0 "U11" H 9000 7225 50  0000 C CNN
-F 1 "P-FET" V 9250 7025 50  0000 C CNN
-F 2 "local:SOIC-8_3.9x4.9mm_P1.27mm_widepads" H 9450 7425 50  0001 C CNN
-F 3 "https://www.diodes.com/assets/Datasheets/DMP3085LSD.pdf" H 9450 7425 50  0001 C CNN
-	1    9250 7025
-	1    0    0    -1  
-$EndComp
-$Comp
-L local:P-FET U11
-U 2 1 5F17DCB7
 P 9250 7425
 F 0 "U11" H 9000 7625 50  0000 C CNN
 F 1 "P-FET" V 9250 7425 50  0000 C CNN
 F 2 "local:SOIC-8_3.9x4.9mm_P1.27mm_widepads" H 9450 7825 50  0001 C CNN
 F 3 "https://www.diodes.com/assets/Datasheets/DMP3085LSD.pdf" H 9450 7825 50  0001 C CNN
-	2    9250 7425
+	1    9250 7425
+	1    0    0    -1  
+$EndComp
+$Comp
+L local:P-FET U11
+U 2 1 5F17DCB7
+P 9250 7025
+F 0 "U11" H 9000 7225 50  0000 C CNN
+F 1 "P-FET" V 9250 7025 50  0000 C CNN
+F 2 "local:SOIC-8_3.9x4.9mm_P1.27mm_widepads" H 9450 7425 50  0001 C CNN
+F 3 "https://www.diodes.com/assets/Datasheets/DMP3085LSD.pdf" H 9450 7425 50  0001 C CNN
+	2    9250 7025
 	1    0    0    -1  
 $EndComp
 $Comp
@@ -1467,6 +1463,17 @@ $EndComp
 Connection ~ 5375 9925
 Wire Wire Line
 	5375 9925 5275 9925
+$Comp
+L Graphic:Logo_Open_Hardware_Large #LOGO1
+U 1 1 5EE98802
+P 11000 10575
+F 0 "#LOGO1" H 11000 11075 50  0001 C CNN
+F 1 "Logo_Open_Hardware_Large" H 11000 10175 50  0001 C CNN
+F 2 "" H 11000 10575 50  0001 C CNN
+F 3 "~" H 11000 10575 50  0001 C CNN
+	1    11000 10575
+	1    0    0    -1  
+$EndComp
 Wire Bus Line
 	10275 6825 10275 9125
 Wire Bus Line
@@ -1485,15 +1492,8 @@ Wire Bus Line
 	7600 7850 12300 7850
 Wire Bus Line
 	10275 1525 10275 6825
-$Comp
-L Graphic:Logo_Open_Hardware_Large #LOGO1
-U 1 1 5EE98802
-P 11000 10575
-F 0 "#LOGO1" H 11000 11075 50  0001 C CNN
-F 1 "Logo_Open_Hardware_Large" H 11000 10175 50  0001 C CNN
-F 2 "" H 11000 10575 50  0001 C CNN
-F 3 "~" H 11000 10575 50  0001 C CNN
-	1    11000 10575
-	1    0    0    -1  
-$EndComp
+Text Label 9625 4225 0    50   ~ 0
+ROW8
+Text Label 9625 4625 0    50   ~ 0
+ROW9
 $EndSCHEMATC
