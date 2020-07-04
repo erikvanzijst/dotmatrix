@@ -9,7 +9,7 @@ const unsigned int CCLK   = A4;
 const unsigned int LE     = A5;
 
 volatile unsigned int screen[DIM];
-volatile unsigned int row = 0;
+volatile byte row = 0;
 
 void setup() {
   Serial.begin(115200);
@@ -33,7 +33,7 @@ void setup() {
 }
 
 void clear() {
-  for (int row = 0; row < DIM; row++) {
+  for (byte row = 0; row < DIM; row++) {
     screen[row] = 0;
   }
 }
@@ -44,37 +44,26 @@ void pulse(unsigned int pin) {
 }
 
 SIGNAL(TIMER0_COMPA_vect) {
-  // Adjust for hardware wiring error:
-  // https://github.com/erikvanzijst/dotmatrix/commit/3c7690eb47
-  const unsigned int rowadj = (row % 2) ? row - 1 : row + 1;
-
   digitalWrite(RSDI, row != 0);
   pulse(RCLK);
 
-  for (unsigned int col = 0; col < DIM; col++) {
-    digitalWrite(CSDI, (screen[rowadj] & (1 << col)) ? HIGH : LOW);
+  for (unsigned int col = 1; col; col <<= 1) {
+    digitalWrite(CSDI, (screen[row] & col) ? HIGH : LOW);
     pulse(CCLK);    
   }
   pulse(LE);
   row = (row + 1) % DIM;
 }
 
-void setpixel(unsigned int row, unsigned int col, bool on) {
-//  Serial.print("Setting pixel ");
-//  Serial.print(row);
-//  Serial.print(", ");
-//  Serial.println(col);
-  if (on) {
-    screen[row] |= (1 << col);
-  } else {
-    screen[row] &= ((1 << col) ^ 0xff);
-  }
-//  dumpscreen();
-}
+// Adjust for hardware wiring error in v01:
+// https://github.com/erikvanzijst/dotmatrix/commit/3c7690eb47
+#define fix(row) (row + ((row & 1) ? -1 : 1))
 
-void dumpscreen() {
-  for (int row = 0; row < DIM; row++) {
-    Serial.println(screen[row], BIN);
+void setpixel(unsigned int row, unsigned int col, bool on) {
+  if (on) {
+    screen[fix(row)] |= (1 << col);
+  } else {
+    screen[fix(row)] &= ((1 << col) ^ 0xff);
   }
 }
 
