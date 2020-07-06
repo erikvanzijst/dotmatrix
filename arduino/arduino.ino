@@ -58,8 +58,8 @@ BrickDef brickdefs[7] = {
     .shape = {
       { .vertex = {{-1, 0}, {0, 0}, {1, 0}, {1, 1}} },
       { .vertex = {{0, 1}, {0, 0}, {0, -1}, {-1, 1}} },
-      { .vertex = {{-1, 1}, {-1, 0}, {0, 0}, {1, 0}} },
-      { .vertex = {{1, -1}, {0, -1}, {0, 0}, {0, 1}} }
+      { .vertex = {{-1, -1}, {-1, 0}, {0, 0}, {1, 0}} },
+      { .vertex = {{0, -1}, {0, 0}, {0, 1}, {1, -1}} }
     }
   },
   { // L
@@ -289,7 +289,7 @@ void loop() {
   FallingBrick brick = {
     .bricknr = (int)random(7),
     .rotation = 0,
-    .location = {.x = 5, .y = 0}
+    .location = {.x = 7, .y = 0}
   };
   FallingBrick copy;
 
