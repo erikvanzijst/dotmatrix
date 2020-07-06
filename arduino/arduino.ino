@@ -262,9 +262,17 @@ void merge(FallingBrick *brick, unsigned int *board) {
   for (int i = 0; i < 4; i++) {
     board[shape.vertex[i].y] |= (1 << shape.vertex[i].x);
   }
-//  for (int i = 0; i < DIM; i++) {
-//    Serial.println(board[row], BIN);
-//  }
+
+  // remove completed lines:
+  int row = DIM - 1;
+  for (int i = DIM - 1; i >= 0; i--) {
+    if (board[i] != 0xffff) {
+      board[row--] = board[i];
+    }
+  }
+  for (; row >= 0; row--) {
+    board[row] = 0;
+  }
 }
 
 Vertex down = {0, 1};
@@ -283,7 +291,6 @@ void loop() {
     .rotation = 0,
     .location = {.x = 5, .y = 0}
   };
-  brick.bricknr = (int)init;
   FallingBrick copy;
 
   while (true) {
