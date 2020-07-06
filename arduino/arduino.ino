@@ -57,42 +57,42 @@ BrickDef brickdefs[7] = {
   },
   { // J
     .shape = {
-      { .vertex = {{-1, 0}, {0, 0}, {1, 0}, {1, 1}} },
-      { .vertex = {{0, 1}, {0, 0}, {0, -1}, {-1, 1}} },
-      { .vertex = {{-1, -1}, {-1, 0}, {0, 0}, {1, 0}} },
-      { .vertex = {{0, -1}, {0, 0}, {0, 1}, {1, -1}} }
+      { .vertex = {{0, 0}, {1, 0}, {2, 0}, {2, 1}} },
+      { .vertex = {{1, 1}, {1, 0}, {1, -1}, {0, 1}} },
+      { .vertex = {{0, -1}, {0, 0}, {1, 0}, {2, 0}} },
+      { .vertex = {{1, -1}, {1, 0}, {1, 1}, {2, -1}} }
     }
   },
   { // L
     .shape = {
-      { .vertex = {{-1, 1}, {-1, 0}, {0, 0}, {1, 0}} },
-      { .vertex = {{-1, -1}, {0, -1}, {0, 0}, {0, 1}} },
-      { .vertex = {{-1, 0}, {0, 0}, {1, 0}, {1, -1}} },
-      { .vertex = {{0, -1}, {0, 0}, {0, 1}, {1, 1}} }
+      { .vertex = {{0, 1}, {0, 0}, {1, 0}, {2, 0}} },
+      { .vertex = {{0, -1}, {1, -1}, {1, 0}, {1, 1}} },
+      { .vertex = {{0, 0}, {1, 0}, {2, 0}, {2, -1}} },
+      { .vertex = {{1, -1}, {1, 0}, {1, 1}, {2, 1}} }
     }
   },
   { // S
     .shape = {
-      { .vertex = {{-1, 1}, {0, 1}, {0, 0}, {1, 0}} },
-      { .vertex = {{0, -1}, {0, 0}, {1, 0}, {1, 1}} },
-      { .vertex = {{-1, 1}, {0, 1}, {0, 0}, {1, 0}} },
-      { .vertex = {{0, -1}, {0, 0}, {1, 0}, {1, 1}} }
+      { .vertex = {{0, 1}, {1, 1}, {1, 0}, {2, 0}} },
+      { .vertex = {{1, -1}, {1, 0}, {2, 0}, {2, 1}} },
+      { .vertex = {{0, 1}, {1, 1}, {1, 0}, {2, 0}} },
+      { .vertex = {{1, -1}, {1, 0}, {2, 0}, {2, 1}} }
     }
   },
   { // Z
     .shape = {
-      { .vertex = {{-1, 0}, {0, 0}, {0, 1}, {1, 1}} },
-      { .vertex = {{0, -1}, {0, 0}, {-1, 0}, {-1, 1}} },
-      { .vertex = {{-1, 0}, {0, 0}, {0, 1}, {1, 1}} },
-      { .vertex = {{0, -1}, {0, 0}, {-1, 0}, {-1, 1}} }
+      { .vertex = {{0, 0}, {1, 0}, {1, 1}, {2, 1}} },
+      { .vertex = {{1, -1}, {1, 0}, {0, 0}, {0, 1}} },
+      { .vertex = {{0, 0}, {1, 0}, {1, 1}, {2, 1}} },
+      { .vertex = {{1, -1}, {1, 0}, {0, 0}, {0, 1}} }
     }
   },
   { // T
     .shape = {
-      { .vertex = {{-1, 0}, {0, 0}, {1, 0}, {0, 1}} },
-      { .vertex = {{0, -1}, {0, 0}, {0, 1}, {-1, 0}} },
-      { .vertex = {{-1, 0}, {0, 0}, {1, 0}, {0, -1}} },
-      { .vertex = {{0, -1}, {0, 0}, {0, 1}, {1, 0}} }
+      { .vertex = {{0, 0}, {1, 0}, {2, 0}, {1, 1}} },
+      { .vertex = {{1, -1}, {1, 0}, {1, 1}, {0, 0}} },
+      { .vertex = {{0, 0}, {1, 0}, {2, 0}, {1, -1}} },
+      { .vertex = {{1, -1}, {1, 0}, {1, 1}, {2, 0}} }
     }
   }
 };
@@ -123,7 +123,7 @@ void setup() {
   digitalWrite(OE, LOW);
   digitalWrite(LE, LOW);
 
-  randomSeed(analogRead(0));
+  randomSeed(analogRead(A4)); // poor attempt at random data from floating input
   clearScreen();
 
   // Schedule timer interrupt to draw 1 display row at a time on
@@ -191,7 +191,7 @@ bool islongpressed(Button *button) {
 
 /* Tetris */
 
-void draw(unsigned int *board, FallingBrick *brick) {
+void drawboard(unsigned int *board, FallingBrick *brick) {
   Shape shape;
   materialize(&shape, brick);
   for (int i = 0; i < DIM; i++) {
@@ -199,6 +199,17 @@ void draw(unsigned int *board, FallingBrick *brick) {
   }
   for (byte i = 0; i < 4; i++) {
     setpixel(shape.vertex[i].y, shape.vertex[i].x + 1, true);
+  }
+}
+
+void drawnext(byte id) {
+  // clear preview area:
+  for (byte row = 0; row < 5; row++) {
+    screen[fix(row)] &= 0xfff0;
+  }
+  // paint the next tetromino:
+  for (byte i = 0; i < 4; i++) {
+    setpixel(brickdefs[id].shape[0].vertex[i].y + 2, brickdefs[id].shape[0].vertex[i].x + 13, true);
   }
 }
 
@@ -270,15 +281,19 @@ Vertex left = {-1, 0};
 Vertex right = {1, 0};
 Vertex identity = {0, 0};
 
+byte next;
+
 void loop() {
   unsigned long speed = 500;
   unsigned long now = millis();
   unsigned int board[DIM];
   memset(board, 0, sizeof(unsigned int) * DIM);
+  next = (int)random(7);
 
   for (byte i = 0; i < DIM; i++) {
     screen[i] = 0x8010; // paint background
   }
+  drawnext(next);
 
   FallingBrick brick = {
     .id = (int)random(7),
@@ -292,19 +307,19 @@ void loop() {
     if (waspressed(&LEFT)) {
       if(move(&copy, &brick, 0, &left, board)) {
         memcpy(&brick, &copy, sizeof(FallingBrick));
-        draw(board, &brick);
+        drawboard(board, &brick);
       }
     }
     if (waspressed(&RIGHT)) {
       if(move(&copy, &brick, 0, &right, board)) {
         memcpy(&brick, &copy, sizeof(FallingBrick));
-        draw(board, &brick);
+        drawboard(board, &brick);
       }
     }
     if (waspressed(&ROT)) {
       if(move(&copy, &brick, 1, &identity, board)) {
         memcpy(&brick, &copy, sizeof(FallingBrick));
-        draw(board, &brick);
+        drawboard(board, &brick);
       }
     }
     if (waspressed(&DOWN)) {
@@ -327,19 +342,26 @@ void loop() {
         printBrick(&brick);
         merge(&brick, board);
 
-        brick.id = (int)random(7);
+        brick.id = next;
         brick.rotation = 0;
         brick.location.x = 4;
         brick.location.y = 0;
+        next = (int)random(7);
+        drawnext(next);
 
         if (!move(&copy, &brick, 0, &down, board)) {
-          Serial.println("--=GAME OVER=--");
-          clearScreen();
-          delay(2000);
+          gameover();
           return;
         }
       }
-      draw(board, &brick);
+      drawboard(board, &brick);
     }
   }
+}
+
+void gameover() {
+  // TODO: do something more elaborate
+  Serial.println("--=GAME OVER=--");
+  clearScreen();
+  delay(2000);
 }
