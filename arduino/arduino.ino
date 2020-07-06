@@ -257,7 +257,8 @@ void printBrick(FallingBrick *brick) {
   Serial.println(brick->rotation);
 }
 
-void merge(FallingBrick *brick, unsigned int *board) {
+byte merge(FallingBrick *brick, unsigned int *board) {
+  byte removed = 0;
   Shape shape;
   materialize(&shape, brick);
   for (int i = 0; i < 4; i++) {
@@ -269,11 +270,22 @@ void merge(FallingBrick *brick, unsigned int *board) {
   for (int i = DIM - 1; i >= 0; i--) {
     if (board[i] < 0xffc0) {
       board[row--] = board[i];
+    } else {
+      removed++;
     }
   }
   for (; row >= 0; row--) {
     board[row] = 0;
   }
+  return removed;
+}
+
+/*
+ * Returns the speed associate with the specified score.
+ * Speed in measured in delay ms.
+ */
+unsigned int getspeed(unsigned int score) {
+  return (unsigned int) max((-5.6 * score + 550) + 50, 50);
 }
 
 Vertex down = {0, 1};
@@ -284,7 +296,8 @@ Vertex identity = {0, 0};
 byte next;
 
 void loop() {
-  unsigned long speed = 500;
+  unsigned int score = 0;
+  unsigned long speed = getspeed(score);
   unsigned long now = millis();
   unsigned int board[DIM];
   memset(board, 0, sizeof(unsigned int) * DIM);
@@ -327,7 +340,7 @@ void loop() {
     } else if (islongpressed(&DOWN)) {
       speed = 60;
     } else {
-      speed = 500;
+      speed = getspeed(score);
     }
 
     if ((millis() - now) > speed) {
@@ -335,12 +348,16 @@ void loop() {
 
       if (move(&copy, &brick, 0, &down, board)) {
         memcpy(&brick, &copy, sizeof(FallingBrick));
-        Serial.println("Brick moved down");
-        printBrick(&copy);
+//        Serial.println("Brick moved down");
+//        printBrick(&copy);
       } else {
         Serial.println("Could not move down; merging.");
         printBrick(&brick);
-        merge(&brick, board);
+        score += merge(&brick, board);
+        Serial.print("Score: ");
+        Serial.print(score, DEC);
+        Serial.print(" speed: ");
+        Serial.println(getspeed(score), DEC);
 
         brick.id = next;
         brick.rotation = 0;
