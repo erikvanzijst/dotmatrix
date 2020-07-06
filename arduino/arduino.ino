@@ -145,8 +145,8 @@ SIGNAL(TIMER0_COMPA_vect) {
   digitalWrite(RSDI, row != 0);
   pulse(RCLK);
 
-  shiftOut(CSDI, CCLK, MSBFIRST, screen[row] >> 8);
-  shiftOut(CSDI, CCLK, MSBFIRST, screen[row]);
+  shiftOut(CSDI, CCLK, LSBFIRST, screen[row]);
+  shiftOut(CSDI, CCLK, LSBFIRST, screen[row] >> 8);
   pulse(LE);
   row = (row + 1) % DIM;
 }
@@ -161,9 +161,9 @@ void setrow(unsigned int row, unsigned int value) {
 
 void setpixel(unsigned int row, unsigned int col, bool on) {
   if (on) {
-    screen[fix(row)] |= (1 << col);
+    screen[fix(row)] |= (0x8000 >> col);
   } else {
-    screen[fix(row)] &= ((1 << col) ^ 0xff);
+    screen[fix(row)] &= ((0x8000 >> col) ^ 0xff);
   }
 }
 
@@ -209,25 +209,11 @@ bool fits(FallingBrick *brick, unsigned int *board) {
   materialize(&shape, brick);
 
   for (byte i = 0; i < 4; i++) {
-    if (shape.vertex[i].y < 0 || shape.vertex[i].y >= DIM || shape.vertex[i].x < 0 || shape.vertex[i].x >= DIM) {
-//      Serial.print("Out of bounds: ");
-//      Serial.print(shape.vertex[i].x, DEC);
-//      Serial.print(", ");
-//      Serial.println(shape.vertex[i].y, DEC);
-
+    if (shape.vertex[i].y < 0 || shape.vertex[i].y >= DIM || shape.vertex[i].x < 0 || shape.vertex[i].x >= DIM ||
+        (board[shape.vertex[i].y] & (0x8000 >> shape.vertex[i].x))) {
       return false;
     }
-    if (board[shape.vertex[i].y] & (1 << shape.vertex[i].x)) {
-//      Serial.print("Hit the board: ");
-//      Serial.print(shape.vertex[i].x, DEC);
-//      Serial.print(", ");
-//      Serial.println(shape.vertex[i].y, DEC);
-
-      return false;
-    }
-//    Serial.println("Vertex fits");
   }
-//  Serial.println("Fits!");
   return true;
 }
 
@@ -266,7 +252,7 @@ void merge(FallingBrick *brick, unsigned int *board) {
   Shape shape;
   materialize(&shape, brick);
   for (int i = 0; i < 4; i++) {
-    board[shape.vertex[i].y] |= (1 << shape.vertex[i].x);
+    board[shape.vertex[i].y] |= (0x8000 >> shape.vertex[i].x);
   }
 
   // remove completed lines:
