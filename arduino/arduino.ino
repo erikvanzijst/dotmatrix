@@ -13,13 +13,14 @@ typedef struct {
   const unsigned int pin;
   int currState;  // the current reading from the input pin
   int lastState;  // the previous reading from the input pin
+  unsigned long lastChanged;
   unsigned long lastDebounce;
 } Button;
 
-Button LEFT   = {A0, LOW, LOW, 0};
-Button RIGHT  = {A2, LOW, LOW, 0};
-Button ROT    = {A3, LOW, LOW, 0};
-Button DOWN   = {A1, LOW, LOW, 0};
+Button LEFT   = {A0, LOW, LOW, 0, 0};
+Button RIGHT  = {A2, LOW, LOW, 0, 0};
+Button ROT    = {A3, LOW, LOW, 0, 0};
+Button DOWN   = {A1, LOW, LOW, 0, 0};
 const unsigned long debounceDelay = 50;
 
 volatile unsigned int screen[DIM];
@@ -178,11 +179,16 @@ bool waspressed(Button *button) {
 
   if ((millis() - button->lastDebounce) > debounceDelay && value != button->currState) {
     button->currState = value;
+    button->lastChanged = millis();
     if (button->currState == HIGH) {
       return true;
     }
   }
   return false;
+}
+
+bool islongpressed(Button *button) {
+  return button->currState == HIGH && (millis() - button->lastChanged) >= 400;
 }
 
 /* Tetris */
@@ -281,7 +287,7 @@ Vertex right = {1, 0};
 Vertex identity = {0, 0};
 
 void loop() {
-  const unsigned long speed = 500;
+  unsigned long speed = 500;
   unsigned long now = millis();
   unsigned int board[DIM];
   memset(board, 0, sizeof(unsigned int) * DIM);
@@ -314,8 +320,11 @@ void loop() {
       }
     }
     if (waspressed(&DOWN)) {
-      // TODO: support long-press
       now -= speed;
+    } else if (islongpressed(&DOWN)) {
+      speed = 60;
+    } else {
+      speed = 500;
     }
 
     if ((millis() - now) > speed) {
