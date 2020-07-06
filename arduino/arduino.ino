@@ -98,7 +98,7 @@ BrickDef brickdefs[7] = {
 };
 
 typedef struct {
-  int bricknr;
+  int id;
   int rotation;
   Vertex location;
 } FallingBrick;
@@ -217,10 +217,10 @@ bool fits(FallingBrick *brick, unsigned int *board) {
   return true;
 }
 
-void materialize(Shape *shape, FallingBrick *brick) {
+void materialize(Shape *dest, FallingBrick *brick) {
   for (int i = 0; i < 4; i++) {
-    shape->vertex[i].x = brickdefs[brick->bricknr].shape[brick->rotation].vertex[i].x + brick->location.x;
-    shape->vertex[i].y = brickdefs[brick->bricknr].shape[brick->rotation].vertex[i].y + brick->location.y;
+    dest->vertex[i].x = brickdefs[brick->id].shape[brick->rotation].vertex[i].x + brick->location.x;
+    dest->vertex[i].y = brickdefs[brick->id].shape[brick->rotation].vertex[i].y + brick->location.y;
   }
 }
 
@@ -279,7 +279,7 @@ void loop() {
   memset(board, 0, sizeof(unsigned int) * DIM);
 
   FallingBrick brick = {
-    .bricknr = (int)random(7),
+    .id = (int)random(7),
     .rotation = 0,
     .location = {.x = 7, .y = 0}
   };
@@ -325,7 +325,7 @@ void loop() {
         printBrick(&brick);
         merge(&brick, board);
 
-        brick.bricknr = (int)random(7);
+        brick.id = (int)random(7);
         brick.rotation = 0;
         brick.location.x = 7;
         brick.location.y = 0;
