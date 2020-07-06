@@ -9,6 +9,19 @@ const unsigned int CSDI   = 4;
 const unsigned int CCLK   = 3;
 const unsigned int LE     = 2;
 
+typedef struct {
+  const unsigned int pin;
+  int currState;  // the current reading from the input pin
+  int lastState;  // the previous reading from the input pin
+  unsigned long lastDebounce;
+} Button;
+
+Button LEFT   = {A0, LOW, LOW, 0};
+Button RIGHT  = {A2, LOW, LOW, 0};
+Button ROT    = {A3, LOW, LOW, 0};
+Button DOWN   = {A1, LOW, LOW, 0};
+const unsigned long debounceDelay = 50;
+
 volatile unsigned int screen[DIM];
 volatile byte row = 0;
 
@@ -99,6 +112,11 @@ void setup() {
   pinMode(CCLK, OUTPUT);
   pinMode(LE, OUTPUT);
 
+  pinMode(LEFT.pin, INPUT);
+  pinMode(RIGHT.pin, INPUT);
+  pinMode(ROT.pin, INPUT);
+  pinMode(DOWN.pin, INPUT);
+
   digitalWrite(OE, LOW);
   digitalWrite(LE, LOW);
 
@@ -146,6 +164,25 @@ void setpixel(unsigned int row, unsigned int col, bool on) {
   } else {
     screen[fix(row)] &= ((1 << col) ^ 0xff);
   }
+}
+
+/*
+ * Returns true if the button went from not pressed to pressed.
+ */
+bool waspressed(Button *button) {
+  const int value = digitalRead(button->pin);
+  if (value != button->lastState) {
+    button->lastDebounce = millis();
+    button->lastState = value;
+  }
+
+  if ((millis() - button->lastDebounce) > debounceDelay && value != button->currState) {
+    button->currState = value;
+    if (button->currState == HIGH) {
+      return true;
+    }
+  }
+  return false;
 }
 
 /* Tetris */
@@ -230,12 +267,16 @@ void merge(FallingBrick *brick, unsigned int *board) {
 //  }
 }
 
+Vertex down = {0, 1};
+Vertex left = {-1, 0};
+Vertex right = {1, 0};
+Vertex identity = {0, 0};
+
 void loop() {
+  const unsigned long speed = 500;
+  unsigned long now = millis();
   unsigned int board[DIM];
   memset(board, 0, sizeof(unsigned int) * DIM);
-  for (int i = 0; i < DIM; i++) {
-    board[i] = 0;
-  }
 
   FallingBrick brick = {
     .bricknr = (int)random(7),
@@ -247,34 +288,54 @@ void loop() {
 
   while (true) {
 
-    Vertex down = {0, 1};
-//    if(move(&copy, &brick, 1, &(Vertex){0, 0}, board)) {
-//      memcpy(&brick, &copy, sizeof(FallingBrick));
-//    }
-
-    delay(500);
-
-    if (move(&copy, &brick, 0, &down, board)) {
-      memcpy(&brick, &copy, sizeof(FallingBrick));
-      Serial.println("Brick moved down");
-      printBrick(&copy);
-    } else {
-      Serial.println("Could not move down; merging.");
-      printBrick(&brick);
-      merge(&brick, board);
-
-      brick.bricknr = (int)random(7);
-      brick.rotation = 0;
-      brick.location.x = (int)random(2, 14);
-      brick.location.y = 0;
-
-      if (!move(&copy, &brick, 0, &down, board)) {
-        Serial.println("--=GAME OVER=--");
-        clearScreen();
-        delay(2000);
-        return;
+    if (waspressed(&LEFT)) {
+      if(move(&copy, &brick, 0, &left, board)) {
+        memcpy(&brick, &copy, sizeof(FallingBrick));
+        draw(board, &brick);
       }
     }
-    draw(board, &brick);
+    if (waspressed(&RIGHT)) {
+      if(move(&copy, &brick, 0, &right, board)) {
+        memcpy(&brick, &copy, sizeof(FallingBrick));
+        draw(board, &brick);
+      }
+    }
+    if (waspressed(&ROT)) {
+      if(move(&copy, &brick, 1, &identity, board)) {
+        memcpy(&brick, &copy, sizeof(FallingBrick));
+        draw(board, &brick);
+      }
+    }
+    if (waspressed(&DOWN)) {
+      // TODO: support long-press
+      now -= speed;
+    }
+
+    if ((millis() - now) > speed) {
+      now = millis();
+
+      if (move(&copy, &brick, 0, &down, board)) {
+        memcpy(&brick, &copy, sizeof(FallingBrick));
+        Serial.println("Brick moved down");
+        printBrick(&copy);
+      } else {
+        Serial.println("Could not move down; merging.");
+        printBrick(&brick);
+        merge(&brick, board);
+
+        brick.bricknr = (int)random(7);
+        brick.rotation = 0;
+        brick.location.x = 7;
+        brick.location.y = 0;
+
+        if (!move(&copy, &brick, 0, &down, board)) {
+          Serial.println("--=GAME OVER=--");
+          clearScreen();
+          delay(2000);
+          return;
+        }
+      }
+      draw(board, &brick);
+    }
   }
 }
