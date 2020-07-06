@@ -9,6 +9,9 @@ const unsigned int CSDI   = 4;
 const unsigned int CCLK   = 3;
 const unsigned int LE     = 2;
 
+volatile unsigned int screen[DIM];
+volatile byte row = 0;
+
 typedef struct {
   const unsigned int pin;
   int currState;  // the current reading from the input pin
@@ -22,9 +25,6 @@ Button RIGHT  = {A2, LOW, LOW, 0, 0};
 Button ROT    = {A3, LOW, LOW, 0, 0};
 Button DOWN   = {A1, LOW, LOW, 0, 0};
 const unsigned long debounceDelay = 50;
-
-volatile unsigned int screen[DIM];
-volatile byte row = 0;
 
 typedef struct {
   int x, y;
@@ -103,6 +103,8 @@ typedef struct {
   Vertex location;
 } FallingBrick;
 
+const byte WIDTH = 10;  // width of tetris board
+
 void setup() {
   Serial.begin(115200);
 
@@ -155,10 +157,6 @@ SIGNAL(TIMER0_COMPA_vect) {
 // https://github.com/erikvanzijst/dotmatrix/commit/3c7690eb47
 #define fix(row) (row + ((row & 1) ? -1 : 1))
 
-void setrow(unsigned int row, unsigned int value) {
-  screen[fix(row)] = value;
-}
-
 void setpixel(unsigned int row, unsigned int col, bool on) {
   if (on) {
     screen[fix(row)] |= (0x8000 >> col);
@@ -197,10 +195,10 @@ void draw(unsigned int *board, FallingBrick *brick) {
   Shape shape;
   materialize(&shape, brick);
   for (int i = 0; i < DIM; i++) {
-    setrow(i, board[i]);
+    screen[fix(i)] &= (((board[i] >> 1) & 0x7fe0) | 0x801f);
   }
   for (byte i = 0; i < 4; i++) {
-    setpixel(shape.vertex[i].y, shape.vertex[i].x, true);
+    setpixel(shape.vertex[i].y, shape.vertex[i].x + 1, true);
   }
 }
 
@@ -209,7 +207,7 @@ bool fits(FallingBrick *brick, unsigned int *board) {
   materialize(&shape, brick);
 
   for (byte i = 0; i < 4; i++) {
-    if (shape.vertex[i].y < 0 || shape.vertex[i].y >= DIM || shape.vertex[i].x < 0 || shape.vertex[i].x >= DIM ||
+    if (shape.vertex[i].y < 0 || shape.vertex[i].y >= DIM || shape.vertex[i].x < 0 || shape.vertex[i].x >= WIDTH ||
         (board[shape.vertex[i].y] & (0x8000 >> shape.vertex[i].x))) {
       return false;
     }
@@ -258,7 +256,7 @@ void merge(FallingBrick *brick, unsigned int *board) {
   // remove completed lines:
   int row = DIM - 1;
   for (int i = DIM - 1; i >= 0; i--) {
-    if (board[i] != 0xffff) {
+    if (board[i] < 0xffc0) {
       board[row--] = board[i];
     }
   }
@@ -278,10 +276,14 @@ void loop() {
   unsigned int board[DIM];
   memset(board, 0, sizeof(unsigned int) * DIM);
 
+  for (byte i = 0; i < DIM; i++) {
+    screen[i] = 0x8010; // paint background
+  }
+
   FallingBrick brick = {
     .id = (int)random(7),
     .rotation = 0,
-    .location = {.x = 7, .y = 0}
+    .location = {.x = 4, .y = 0}
   };
   FallingBrick copy;
 
@@ -327,7 +329,7 @@ void loop() {
 
         brick.id = (int)random(7);
         brick.rotation = 0;
-        brick.location.x = 7;
+        brick.location.x = 4;
         brick.location.y = 0;
 
         if (!move(&copy, &brick, 0, &down, board)) {
