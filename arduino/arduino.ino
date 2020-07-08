@@ -98,8 +98,8 @@ BrickDef brickdefs[7] = {
 };
 
 typedef struct {
-  int id;
-  int rotation;
+  byte id;
+  byte rotation;
   Vertex location;
 } FallingBrick;
 
@@ -194,8 +194,9 @@ bool islongpressed(Button *button) {
 void drawboard(unsigned int *board, FallingBrick *brick) {
   Shape shape;
   materialize(&shape, brick);
-  for (int i = 0; i < DIM; i++) {
-    screen[fix(i)] &= (((board[i] >> 1) & 0x7fe0) | 0x801f);
+  for (byte i = 0; i < DIM; i++) {
+    screen[fix(i)] &= 0x801F; // clear the board section of the screen line
+    screen[fix(i)] |= ((board[i] >> 1) & 0x7fe0);
   }
   for (byte i = 0; i < 4; i++) {
     setpixel(shape.vertex[i].y, shape.vertex[i].x + 1, true);
@@ -227,7 +228,7 @@ bool fits(FallingBrick *brick, unsigned int *board) {
 }
 
 void materialize(Shape *dest, FallingBrick *brick) {
-  for (int i = 0; i < 4; i++) {
+  for (byte i = 0; i < 4; i++) {
     dest->vertex[i].x = brickdefs[brick->id].shape[brick->rotation].vertex[i].x + brick->location.x;
     dest->vertex[i].y = brickdefs[brick->id].shape[brick->rotation].vertex[i].y + brick->location.y;
   }
@@ -261,7 +262,7 @@ byte merge(FallingBrick *brick, unsigned int *board) {
   byte removed = 0;
   Shape shape;
   materialize(&shape, brick);
-  for (int i = 0; i < 4; i++) {
+  for (byte i = 0; i < 4; i++) {
     board[shape.vertex[i].y] |= (0x8000 >> shape.vertex[i].x);
   }
 
@@ -301,7 +302,7 @@ void loop() {
   unsigned long now = millis();
   unsigned int board[DIM];
   memset(board, 0, sizeof(unsigned int) * DIM);
-  next = (int)random(7);
+  next = (byte)random(7);
 
   for (byte i = 0; i < DIM; i++) {
     screen[i] = 0x8010; // paint background
@@ -309,7 +310,7 @@ void loop() {
   drawnext(next);
 
   FallingBrick brick = {
-    .id = (int)random(7),
+    .id = (byte)random(7),
     .rotation = 0,
     .location = {.x = 4, .y = 0}
   };
@@ -338,7 +339,7 @@ void loop() {
     if (waspressed(&DOWN)) {
       now -= speed;
     } else if (islongpressed(&DOWN)) {
-      speed = 60;
+      speed = 40;
     } else {
       speed = getspeed(score);
     }
