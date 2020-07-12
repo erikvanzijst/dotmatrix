@@ -334,7 +334,7 @@ void scroll(const char *msg, byte row, long timeout) {
   byte chars[strlen(msg)][5];
 
   for (unsigned int i = 0; i < strlen(msg); i++) {
-    const int j = ((int)msg[i]) == 0x20 ? 0x10 : ((int)msg[i]) - 0x30; // space is mapped to @
+    const int j = ((int)msg[i]) == 0x20 ? 0x10 : ((int)toupper(msg[i])) - 0x30; // space is mapped to @
     if (j < 0 || j > 43) {
       Serial.print("Invalid character! 0x");
       Serial.println((int)msg[i], HEX);
