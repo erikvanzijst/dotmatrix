@@ -105,6 +105,55 @@ typedef struct {
 
 const byte WIDTH = 10;  // width of tetris board
 
+// partial minimalist 5x5 font from https://www.dafont.com/5x5.font
+const byte font[43][5] PROGMEM = {
+  {0x1f, 0x13, 0x15, 0x19, 0x1f}, // 0
+  {0x04, 0x0c, 0x04, 0x04, 0x0e}, // 1
+  {0x1e, 0x01, 0x0e, 0x10, 0x1f}, // 2
+  {0x1f, 0x01, 0x0e, 0x01, 0x1f}, // 3
+  {0x10, 0x10, 0x14, 0x1f, 0x04}, // 4
+  {0x1f, 0x10, 0x1e, 0x01, 0x1e}, // 5
+  {0x1f, 0x10, 0x1f, 0x11, 0x1f}, // 6
+  {0x1f, 0x01, 0x02, 0x04, 0x04}, // 7
+  {0x1f, 0x11, 0x1f, 0x11, 0x1f}, // 8
+  {0x1f, 0x11, 0x1f, 0x01, 0x1f}, // 9
+
+  {0x0, 0x04, 0x0, 0x04, 0x0},    // :
+  {0x0, 0x04, 0x0, 0x04, 0x04},   // ;
+  {0, 0, 0, 0, 0},  // <
+  {0, 0, 0, 0, 0},  // =
+  {0, 0, 0, 0, 0},  // >
+  {0, 0, 0, 0, 0},  // ?
+  {0, 0, 0, 0, 0},  // fake space
+
+  {0x1f, 0x11, 0x11, 0x1f, 0x11}, // A
+  {0x1f, 0x11, 0x1e, 0x11, 0x1f}, // B
+  {0x1f, 0x10, 0x10, 0x10, 0x1f}, // C
+  {0x1e, 0x11, 0x11, 0x11, 0x1e}, // D
+  {0x1f, 0x10, 0x1e, 0x10, 0x1f}, // E
+  {0x1f, 0x10, 0x1e, 0x10, 0x10}, // F
+  {0x1f, 0x10, 0x13, 0x11, 0x1f}, // G
+  {0x11, 0x11, 0x1f, 0x11, 0x11}, // H
+  {0x1f, 0x04, 0x04, 0x04, 0x1f}, // I
+  {0x03, 0x01, 0x01, 0x11, 0x1f}, // J
+  {0x11, 0x12, 0x1c, 0x12, 0x11}, // K
+  {0x10, 0x10, 0x10, 0x10, 0x1f}, // L
+  {0x11, 0x1b, 0x15, 0x11, 0x11}, // M
+  {0x11, 0x19, 0x15, 0x13, 0x11}, // N
+  {0x0e, 0x11, 0x11, 0x11, 0x0e}, // O
+  {0x1e, 0x11, 0x1e, 0x10, 0x10}, // P
+  {0x1f, 0x11, 0x11, 0x1f, 0x04}, // Q
+  {0x1e, 0x11, 0x1e, 0x11, 0x11}, // R
+  {0x1f, 0x10, 0x1f, 0x01, 0x1f}, // S
+  {0x1f, 0x04, 0x04, 0x04, 0x04}, // T
+  {0x11, 0x11, 0x11, 0x11, 0x1f}, // U
+  {0x11, 0x11, 0x0a, 0x0a, 0x04}, // V
+  {0x11, 0x11, 0x15, 0x15, 0x0a}, // W
+  {0x11, 0x0a, 0x04, 0x0a, 0x11}, // X
+  {0x11, 0x11, 0x0a, 0x04, 0x04}, // Y
+  {0x1f, 0x02, 0x04, 0x08, 0x1f}  // Z
+};
+
 void setup() {
   Serial.begin(115200);
 
@@ -281,12 +330,41 @@ byte merge(FallingBrick *brick, unsigned int *board) {
   return removed;
 }
 
+void scroll(const char *msg, byte row, long timeout) {
+  byte chars[strlen(msg)][5];
+
+  for (unsigned int i = 0; i < strlen(msg); i++) {
+    const int j = ((int)msg[i]) == 0x20 ? 0x10 : ((int)msg[i]) - 0x30; // space is mapped to @
+    if (j < 0 || j > 43) {
+      Serial.print("Invalid character! ");
+      Serial.println((int)msg[i], HEX);
+      return;
+    }
+    memcpy_P(chars[i], &(font[j]), 5);
+  }
+  scrollbytes(chars, sizeof(chars) / 5, row, timeout);
+}
+
+void scrollbytes(byte glyphs[][5], unsigned int len, byte row, long timeout) {
+  const unsigned long start = millis();
+  Serial.print("scroll: ");
+  Serial.println(len, DEC);
+
+  for (unsigned int pos = 0; (timeout == -1 || (millis() - start) < timeout) && !waspressed(&ROT); pos = ++pos % (len * 6)) {
+    for (int r = 4; r >= 0; r--) {
+      screen[fix(row + r)] <<= 1;
+      screen[fix(row + r)] |= ( (glyphs[pos / 6][r] & (0x20 >> (pos % 6))) ? 1 : 0);
+    }
+    delay(75);
+  }
+}
+
 /*
- * Returns the speed associate with the specified score.
+ * Returns the speed associated with the specified number of removed lines.
  * Speed in measured in delay ms.
  */
-unsigned int getspeed(unsigned int score) {
-  return (unsigned int) max((-5.6 * score + 550) + 50, 50);
+unsigned int getspeed(unsigned int lines) {
+  return (unsigned int) max((-5.6 * lines + 550) + 50, 50);
 }
 
 Vertex down = {0, 1};
@@ -297,8 +375,12 @@ Vertex identity = {0, 0};
 byte next;
 
 void loop() {
-  unsigned int score = 0;
-  unsigned long speed = getspeed(score);
+  clearScreen();
+  scroll("TETRIS   ", 5, 4000);
+
+  unsigned int lines = 0;
+  unsigned int bcount = 0;
+  unsigned long speed = getspeed(lines);
   unsigned long now = millis();
   unsigned int board[DIM];
   memset(board, 0, sizeof(unsigned int) * DIM);
@@ -341,7 +423,7 @@ void loop() {
     } else if (islongpressed(&DOWN)) {
       speed = 40;
     } else {
-      speed = getspeed(score);
+      speed = getspeed(lines);
     }
 
     if ((millis() - now) > speed) {
@@ -349,16 +431,13 @@ void loop() {
 
       if (move(&copy, &brick, 0, &down, board)) {
         memcpy(&brick, &copy, sizeof(FallingBrick));
-//        Serial.println("Brick moved down");
-//        printBrick(&copy);
       } else {
         Serial.println("Could not move down; merging.");
         printBrick(&brick);
-        score += merge(&brick, board);
-        Serial.print("Score: ");
-        Serial.print(score, DEC);
-        Serial.print(" speed: ");
-        Serial.println(getspeed(score), DEC);
+        lines += merge(&brick, board);
+        bcount++;
+        Serial.print("Speed: ");
+        Serial.println(getspeed(lines), DEC);
 
         brick.id = next;
         brick.rotation = 0;
@@ -368,7 +447,7 @@ void loop() {
         drawnext(next);
 
         if (!move(&copy, &brick, 0, &down, board)) {
-          gameover();
+          gameover(lines * 10 + bcount);
           return;
         }
       }
@@ -377,9 +456,15 @@ void loop() {
   }
 }
 
-void gameover() {
+void gameover(unsigned int score) {
+  char buf[] = "SCORE:             ";
   // TODO: do something more elaborate
   Serial.println("--=GAME OVER=--");
+
+  delay(1000);
   clearScreen();
-  delay(2000);
+  itoa(score, (char *)(buf + 6), 10);
+  strcpy((char *)(buf + strlen(buf)), "  ");
+  waspressed(&ROT); // clear button state
+  scroll(buf, 5, -1);
 }
