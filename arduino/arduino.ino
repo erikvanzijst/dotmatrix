@@ -336,7 +336,7 @@ void scroll(const char *msg, byte row, long timeout) {
   for (unsigned int i = 0; i < strlen(msg); i++) {
     const int j = ((int)msg[i]) == 0x20 ? 0x10 : ((int)msg[i]) - 0x30; // space is mapped to @
     if (j < 0 || j > 43) {
-      Serial.print("Invalid character! ");
+      Serial.print("Invalid character! 0x");
       Serial.println((int)msg[i], HEX);
       return;
     }
@@ -347,8 +347,6 @@ void scroll(const char *msg, byte row, long timeout) {
 
 void scrollbytes(byte glyphs[][5], unsigned int len, byte row, long timeout) {
   const unsigned long start = millis();
-  Serial.print("scroll: ");
-  Serial.println(len, DEC);
 
   for (unsigned int pos = 0; (timeout == -1 || (millis() - start) < timeout) && !waspressed(&ROT); pos = ++pos % (len * 6)) {
     for (int r = 4; r >= 0; r--) {
