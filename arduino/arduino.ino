@@ -369,20 +369,19 @@ Vertex down = {0, 1};
 Vertex left = {-1, 0};
 Vertex right = {1, 0};
 Vertex identity = {0, 0};
-
-byte next;
+const unsigned int linevalue[] = {0, 40, 100, 300, 1200};
 
 void loop() {
   clearScreen();
   scroll("TETRIS   ", 5, 4000);
 
   unsigned int lines = 0;
-  unsigned int bcount = 0;
+  unsigned int score = 0;
   unsigned long speed = getspeed(lines);
   unsigned long now = millis();
   unsigned int board[DIM];
   memset(board, 0, sizeof(unsigned int) * DIM);
-  next = (byte)random(7);
+  byte next = (byte)random(7);
 
   for (byte i = 0; i < DIM; i++) {
     screen[i] = 0x8010; // paint background
@@ -432,10 +431,9 @@ void loop() {
       } else {
         Serial.println("Could not move down; merging.");
         printBrick(&brick);
-        lines += merge(&brick, board);
-        bcount++;
-        Serial.print("Speed: ");
-        Serial.println(getspeed(lines), DEC);
+        const byte removed = merge(&brick, board);
+        lines += removed;
+        score += linevalue[min(removed, 4)] + 1;
 
         brick.id = next;
         brick.rotation = 0;
@@ -445,7 +443,7 @@ void loop() {
         drawnext(next);
 
         if (!move(&copy, &brick, 0, &down, board)) {
-          gameover(lines * 10 + bcount);
+          gameover(score);
           return;
         }
       }
