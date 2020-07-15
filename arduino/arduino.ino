@@ -177,6 +177,8 @@ const byte font[43][5] PROGMEM = {
 };
 
 void setup() {
+  cli();
+
   Serial.begin(115200);
 
   pinMode(RCLK, OUTPUT);
@@ -198,9 +200,26 @@ void setup() {
   clearScreen();
 
   // Schedule timer interrupt to draw 1 display row at a time on
-  // Timer0 at 976.5625Hz yielding 61Hz refresh rate:
-  OCR0A = 0xAF;
-  TIMSK0 |= _BV(OCIE0A);
+  // Timer2 at 2kHz yielding 125Hz refresh rate.
+  //
+  // The scanline ISR takes 296us, making 3kHz the absolute fastest we could
+  // schedule the interrupt, as the display would consume the entire CPU with no
+  // cycles left for the main program loop.
+  // We need 16 scanlines for one full refresh, so for a robust flicker-free refresh
+  // rate of 125Hz, we need a 2kHz interrupt timer, consuming about two thirds
+  // of the ATmega328's processing power.
+
+  TCCR2A = 0;               // set entire TCCR2A register to 0
+  TCCR2B = 0;               // same for TCCR2B
+  TCNT2  = 0;               // initialize counter value to 0
+
+  // set compare match register for 2khz increments
+  OCR2A = 124;              // = (16*10^6) / (2000*64) - 1 (must be <256)
+  TCCR2A |= (1 << WGM21);   // turn on CTC mode
+  TCCR2B |= (1 << CS22);    // Set CS22 bit for 64 prescaler
+  TIMSK2 |= (1 << OCIE2A);  // enable timer compare interrupt
+
+  sei();
 }
 
 void clearScreen() {
@@ -214,7 +233,7 @@ void pulse(unsigned int pin) {
   digitalWrite(pin, LOW);
 }
 
-SIGNAL(TIMER0_COMPA_vect) {
+SIGNAL(TIMER2_COMPA_vect) {
   digitalWrite(RSDI, row != 0);
   pulse(RCLK);
 
