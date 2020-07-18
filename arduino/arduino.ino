@@ -372,28 +372,48 @@ byte merge(FallingBrick *brick, unsigned int *board) {
   return removed;
 }
 
-void scroll(const char *msg, byte row, long timeout) {
-  byte chars[strlen(msg)][5];
-
-  for (unsigned int i = 0; i < strlen(msg); i++) {
-    const int j = ((int)msg[i]) == 0x20 ? 0x10 : ((int)toupper(msg[i])) - 0x30; // space is mapped to @
+int toGlyphs(byte *glyphs, const char *str) {
+  for (unsigned int i = 0; i < strlen(str); i++) {
+    const int j = ((int)str[i]) == 0x20 ? 0x10 : ((int)toupper(str[i])) - 0x30; // space is mapped to @
     if (j < 0 || j > 43) {
       Serial.print("Invalid character! 0x");
-      Serial.println((int)msg[i], HEX);
-      return;
+      Serial.println((int)str[i], HEX);
+      return -1;
     }
-    memcpy_P(chars[i], &(font[j]), 5);
+    memcpy_P(glyphs + i*5, &(font[j]), 5);
   }
-  scrollbytes(chars, sizeof(chars) / 5, row, timeout);
+  return 0;
 }
 
-void scrollbytes(byte glyphs[][5], unsigned int len, byte row, long timeout) {
+void scroll(const char *line1, const char *line2, long timeout) {
   const unsigned long start = millis();
+  struct Line {
+    unsigned int pos = 0;
+    byte row;
+    byte *glyphs;
+    unsigned int len;
+  };
+  Line lines[2];
+  byte glyphs1[strlen(line1) * 5];
+  byte glyphs2[strlen(line2) * 5];
 
-  for (unsigned int pos = 0; (timeout == -1 || (millis() - start) < timeout) && !waspressed(&ROT); pos = ++pos % (len * 6)) {
-    for (int r = 4; r >= 0; r--) {
-      screen[fix(row + r)] <<= 1;
-      screen[fix(row + r)] |= ( (glyphs[pos / 6][r] & (0x20 >> (pos % 6))) ? 1 : 0);
+  if (toGlyphs((byte *)glyphs1, line1) || toGlyphs((byte *)glyphs2, line2)) {
+    return;
+  }
+  lines[0].row = strlen(line2) == 0 ? 5 : 2;
+  lines[0].glyphs = glyphs1;
+  lines[0].len = strlen(line1);
+  lines[1].row = strlen(line1) == 0 ? 5 : 10;
+  lines[1].glyphs = glyphs2;
+  lines[1].len = strlen(line2);
+
+  while ((timeout == -1 || (millis() - start) < timeout) && !waspressed(&ROT)) {
+    for (byte i = 0; i < 2; i++) {
+      for (int r = 4; lines[i].len && r >= 0; r--) {
+        screen[fix(lines[i].row + r)] <<= 1;
+        screen[fix(lines[i].row + r)] |= ( (*(lines[i].glyphs + ((lines[i].pos / 6) * 5) + r) & (0x20 >> (lines[i].pos % 6))) ? 1 : 0);
+      }
+      lines[i].pos = (lines[i].pos + 1) % (lines[i].len * 6);
     }
     delay(75);
   }
@@ -415,7 +435,7 @@ const unsigned int linevalue[] = {0, 40, 100, 300, 1200};
 
 void loop() {
   clearScreen();
-  scroll("TETRIS   ", 5, 4000);
+  scroll("TETRIS   ", "", 4000);
 
   unsigned int lines = 0;
   unsigned int score = 0;
@@ -495,16 +515,22 @@ void loop() {
 }
 
 void gameover(unsigned int score) {
-  char buf[] = "SCORE:             ";
-  // TODO: do something more elaborate
-  Serial.println(F("--=GAME OVER=--"));
+  char top[]    = "YOU :             ";
+  char bottom[] = "BEST:             ";
+  const unsigned int hiscore = getAndSetHiscore(score);
 
   delay(1000);
   clearScreen();
-  itoa(score, (char *)(buf + 6), 10);
-  strcpy((char *)(buf + strlen(buf)), "  ");
+
+  itoa(hiscore, (char *)(bottom + 5), 10);
+  strcpy((char *)(bottom + strlen(bottom)), "  ");
+
+  itoa(score, (char *)(top + 5), 10);
+  memset((char *)(top + strlen(top)), 0x20, sizeof(top) - strlen(top));
+  top[strlen(bottom)] = 0;
+
   waspressed(&ROT); // clear button state
-  scroll(buf, 5, -1);
+  scroll(top, bottom, -1);
 }
 
 unsigned long getAndSetHiscore(unsigned long score) {
