@@ -19,6 +19,7 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
+#include <EEPROM.h>
 
 // Display driver
 const unsigned DIM        = 16;
@@ -337,13 +338,13 @@ bool move(FallingBrick *dest, FallingBrick *src, int rot, Vertex *vector, unsign
 void printBrick(FallingBrick *brick) {
   Shape shape;
   materialize(&shape, brick);
-  Serial.print("Shape: ");
+  Serial.print(F("Shape: "));
   for (int i = 0; i < 4; i++) {
-    Serial.print("(");
+    Serial.print(F("("));
     Serial.print(shape.vertex[i].x, DEC);
-    Serial.print(", ");
+    Serial.print(F(", "));
     Serial.print(shape.vertex[i].y, DEC);
-    Serial.print(") ");
+    Serial.print(F(") "));
   }
   Serial.println(brick->rotation);
 }
@@ -470,7 +471,7 @@ void loop() {
       if (move(&copy, &brick, 0, &down, board)) {
         memcpy(&brick, &copy, sizeof(FallingBrick));
       } else {
-        Serial.println("Could not move down; merging.");
+        Serial.println(F("Could not move down; merging."));
         printBrick(&brick);
         const byte removed = merge(&brick, board);
         lines += removed;
@@ -496,7 +497,7 @@ void loop() {
 void gameover(unsigned int score) {
   char buf[] = "SCORE:             ";
   // TODO: do something more elaborate
-  Serial.println("--=GAME OVER=--");
+  Serial.println(F("--=GAME OVER=--"));
 
   delay(1000);
   clearScreen();
@@ -504,4 +505,26 @@ void gameover(unsigned int score) {
   strcpy((char *)(buf + strlen(buf)), "  ");
   waspressed(&ROT); // clear button state
   scroll(buf, 5, -1);
+}
+
+unsigned long getAndSetHiscore(unsigned long score) {
+  const unsigned int FINGERPRINT = 54665;
+  struct Hiscore {
+    unsigned int fingerprint;
+    unsigned long score;
+  };
+  Hiscore hiscore;
+
+  EEPROM.get(0, hiscore);
+  if (hiscore.fingerprint != FINGERPRINT || hiscore.score < score) {
+    Serial.print(F("New hiscore: "));
+    Serial.print(score, DEC);
+    Serial.print(F(" > "));
+    Serial.println(hiscore.score, DEC);
+
+    hiscore.fingerprint = FINGERPRINT;
+    hiscore.score = score;
+    EEPROM.put(0, hiscore);
+  }
+  return hiscore.score;
 }
