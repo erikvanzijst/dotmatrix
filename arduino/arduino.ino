@@ -20,6 +20,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 #include <EEPROM.h>
+#include <FastGPIO.h>
 
 // Display driver
 const unsigned DIM        = 16;
@@ -182,20 +183,17 @@ void setup() {
 
   Serial.begin(115200);
 
-  pinMode(RCLK, OUTPUT);
-  pinMode(RSDI, OUTPUT);
-  pinMode(OE, OUTPUT);
-  pinMode(CSDI, OUTPUT);
-  pinMode(CCLK, OUTPUT);
-  pinMode(LE, OUTPUT);
+  FastGPIO::Pin<RCLK>::setOutputLow();
+  FastGPIO::Pin<RSDI>::setOutputLow();
+  FastGPIO::Pin<OE>::setOutputLow();
+  FastGPIO::Pin<CSDI>::setOutputLow();
+  FastGPIO::Pin<CCLK>::setOutputLow();
+  FastGPIO::Pin<LE>::setOutputLow();
 
   pinMode(LEFT.pin, INPUT);
   pinMode(RIGHT.pin, INPUT);
   pinMode(ROT.pin, INPUT);
   pinMode(DOWN.pin, INPUT);
-
-  digitalWrite(OE, LOW);
-  digitalWrite(LE, LOW);
 
   randomSeed(analogRead(A4)); // poor attempt at random data from floating input
   clearScreen();
@@ -229,18 +227,21 @@ void clearScreen() {
   }
 }
 
-void pulse(unsigned int pin) {
-  digitalWrite(pin, HIGH);
-  digitalWrite(pin, LOW);
-}
-
 SIGNAL(TIMER2_COMPA_vect) {
-  digitalWrite(RSDI, row != 0);
-  pulse(RCLK);
+  FastGPIO::Pin<RSDI>::setOutputValue(row != 0);
 
-  shiftOut(CSDI, CCLK, LSBFIRST, screen[row]);
-  shiftOut(CSDI, CCLK, LSBFIRST, screen[row] >> 8);
-  pulse(LE);
+  FastGPIO::Pin<RCLK>::setOutputValueHigh();
+  FastGPIO::Pin<RCLK>::setOutputValueLow();
+
+  for (unsigned int col = 1; col; col <<= 1) {
+    FastGPIO::Pin<CSDI>::setOutputValue((screen[row] & col) ? HIGH : LOW);
+
+    FastGPIO::Pin<CCLK>::setOutputValueHigh();
+    FastGPIO::Pin<CCLK>::setOutputValueLow();
+  }
+
+  FastGPIO::Pin<LE>::setOutputValueHigh();
+  FastGPIO::Pin<LE>::setOutputValueLow();
   row = (row + 1) % DIM;
 }
 
@@ -411,7 +412,8 @@ void scroll(const char *line1, const char *line2, long timeout) {
     for (byte i = 0; i < 2; i++) {
       for (int r = 4; lines[i].len && r >= 0; r--) {
         screen[fix(lines[i].row + r)] <<= 1;
-        screen[fix(lines[i].row + r)] |= ( (*(lines[i].glyphs + ((lines[i].pos / 6) * 5) + r) & (0x20 >> (lines[i].pos % 6))) ? 1 : 0);
+        screen[fix(lines[i].row + r)] |= (
+          (*(lines[i].glyphs + ((lines[i].pos / 6) * 5) + r) & (0x20 >> (lines[i].pos % 6))) ? 1 : 0);
       }
       lines[i].pos = (lines[i].pos + 1) % (lines[i].len * 6);
     }
@@ -543,11 +545,6 @@ unsigned long getAndSetHiscore(unsigned long score) {
 
   EEPROM.get(0, hiscore);
   if (hiscore.fingerprint != FINGERPRINT || hiscore.score < score) {
-    Serial.print(F("New hiscore: "));
-    Serial.print(score, DEC);
-    Serial.print(F(" > "));
-    Serial.println(hiscore.score, DEC);
-
     hiscore.fingerprint = FINGERPRINT;
     hiscore.score = score;
     EEPROM.put(0, hiscore);
