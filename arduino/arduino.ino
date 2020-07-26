@@ -48,6 +48,7 @@ Button LEFT   = {A0, LOW, LOW, 0, 0};
 Button RIGHT  = {A2, LOW, LOW, 0, 0};
 Button ROT    = {A3, LOW, LOW, 0, 0};
 Button DOWN   = {A1, LOW, LOW, 0, 0};
+Button PAUSE  = {A4, LOW, LOW, 0, 0};
 const unsigned long debounceDelay = 50;
 
 typedef struct {
@@ -408,7 +409,7 @@ void scroll(const char *line1, const char *line2, long timeout) {
   lines[1].glyphs = glyphs2;
   lines[1].len = strlen(line2);
 
-  while ((timeout == -1 || (millis() - start) < timeout) && !waspressed(&ROT)) {
+  while ((timeout == -1 || (millis() - start) < timeout) && !waspressed(&ROT) && !waspressed(&PAUSE)) {
     for (byte i = 0; i < 2; i++) {
       for (int r = 4; lines[i].len && r >= 0; r--) {
         screen[fix(lines[i].row + r)] <<= 1;
@@ -427,6 +428,24 @@ void scroll(const char *line1, const char *line2, long timeout) {
  */
 unsigned int getspeed(unsigned int lines) {
   return (unsigned int) max((-5.6 * lines + 550) + 50, 50);
+}
+
+void pause() {
+  if (waspressed(&PAUSE)) {
+    unsigned int saved[DIM];
+
+    Serial.println(F("Paused..."));
+    memcpy(saved, screen, sizeof(screen));
+    clearScreen();
+
+    scroll(
+      "Paused          ",
+      "        Paused  ",
+      -1);
+
+    memcpy(screen, saved, sizeof(screen));
+    Serial.println(F("Resuming..."));
+  }
 }
 
 Vertex down = {0, 1};
@@ -460,6 +479,7 @@ void loop() {
   FallingBrick copy;
 
   while (true) {
+    pause();
 
     if (waspressed(&LEFT)) {
       if(move(&copy, &brick, 0, &left, board)) {
